@@ -25,6 +25,11 @@ variable "unravel_role" {
   default     = ""
 }
 
+variable "admin_unravel_role" {
+  description = "Unravel custom role name for Admin accounts"
+  default     = ""
+}
+
 variable "unravel_service_account" {
   description = "Unravel service account name"
   default     = ""

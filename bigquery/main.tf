@@ -12,7 +12,7 @@ data "google_project" "project" {
 
 }
 
-# Variables which are constant.
+# Variables which are constant. Changing these values will result in broken data
 locals {
   project_all           = concat(var.project_ids, [var.unravel_project_id])
   project_ids_map       = { for project in toset(local.project_all) : project => project }
@@ -37,9 +37,11 @@ locals {
     "recommender.bigqueryCapacityCommitmentsRecommendations.list",
     "recommender.bigqueryPartitionClusterRecommendations.get",
     "recommender.bigqueryPartitionClusterRecommendations.list",
-    "resourcemanager.projects.get"
+    "resourcemanager.projects.get",
+    "serviceusage.services.use"
   ], var.x_svc_acc_permissions)
 
+  # Permission required for the Unravel application to gather metrics from admin projects about reservations and commitments
   admin_project_role_permission = [
     "bigquery.capacityCommitments.list",
     "bigquery.jobs.create",
@@ -47,7 +49,7 @@ locals {
   ]
 
   # Sink filter to get only the logs related to bigquery
-  sink_filter = "resource.type=\"bigquery_resource\" AND (protoPayload.methodName=\"jobservice.insert\" OR protoPayload.methodName=\"jobservice.jobcompleted\")"
+  sink_filter = "(resource.type=\"bigquery_resource\" AND (protoPayload.methodName=\"jobservice.insert\" OR protoPayload.methodName=\"jobservice.jobcompleted\")) OR resource.type=\"bigquery_dts_config\""
 
 }
 
@@ -77,6 +79,7 @@ module "unravel_iam" {
   admin_project_ids             = local.admin_project_ids_map
   admin_project_role_permission = local.admin_project_role_permission
   unravel_role                  = var.unravel_role
+  admin_unravel_role            = var.admin_unravel_role
   unravel_service_account       = var.unravel_service_account
   unravel_project_id            = var.unravel_project_id
   key_based_auth_model          = var.key_based_auth_model
@@ -103,6 +106,8 @@ module "unravel_sink" {
   sink_filter       = local.sink_filter
   pub_sub_ids       = module.unravel_topics.pubsub_ids
   unravel_sink_name = var.unravel_sink_name
+
+  depends_on = [google_project_service.enable_cloud_logging_api]
 
 }
 
@@ -138,6 +143,19 @@ resource "google_project_service" "enable_cloud_resource_manager_api" {
 
   project                    = each.value
   service                    = "cloudresourcemanager.googleapis.com"
+  disable_dependent_services = true
+  disable_on_destroy         = false
+
+  depends_on = [
+  data.google_project.project]
+}
+
+# Enable cloud logging API
+resource "google_project_service" "enable_cloud_logging_api" {
+  for_each = local.project_ids_map
+
+  project                    = each.value
+  service                    = "logging.googleapis.com"
   disable_dependent_services = true
   disable_on_destroy         = false
 

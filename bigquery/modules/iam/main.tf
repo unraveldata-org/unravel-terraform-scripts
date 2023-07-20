@@ -17,7 +17,7 @@ resource "google_project_iam_custom_role" "admin_project_unravel_role" {
   for_each = var.admin_project_ids
 
   project     = each.value
-  role_id     = var.unravel_role
+  role_id     = var.admin_unravel_role
   title       = "Unravel Admin Bigquery Role"
   description = "Unravel Bigquery Role for Admin projects with reservations/collections"
   permissions = var.admin_project_role_permission
@@ -33,7 +33,7 @@ resource "google_service_account" "unravel_service_account" {
   depends_on = [google_project_iam_custom_role.unravel_role]
 }
 
-# Attach IAM role with Unravel Service account
+# Attach Project IAM role with Unravel Service account
 resource "google_project_iam_member" "unravel_iam" {
 
   for_each = var.project_ids

@@ -6,7 +6,7 @@ variable "pull_model" {
 }
 
 variable "project_ids" {
-  description = "GCP Project IDs for configuring Unravel Bigquery"
+  description = "GCP Project IDs for configuring Unravel Bigquery. Only those queries running in these projects will be monitored"
   type        = list(string)
 
   validation {
@@ -83,10 +83,10 @@ variable "unravel_keys_location" {
 
 variable "unravel_push_subscription" {
 
-  description = "Unravel Push subscription ID"
+  description = "Unravel Pub/Sub topic subscription ID"
   type        = string
 
-  default = "unravel_push_subscription"
+  default = "unravel_subscription"
 
   validation {
     condition     = can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", var.unravel_push_subscription))
@@ -120,6 +120,18 @@ variable "unravel_role" {
   }
 }
 
+variable "admin_unravel_role" {
+  description = "Custom role name for GCP Admin accounts"
+  type        = string
+
+  default = "admin_unravel_role"
+
+  validation {
+    condition     = can(regex("^[a-z0-9_.]{3,64}$", var.admin_unravel_role))
+    error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-)."
+  }
+}
+
 variable "unravel_sink_name" {
   description = "Sink name for Unravel"
   type        = string
@@ -140,7 +152,7 @@ variable "unravel_service_account" {
 
   validation {
     condition     = can(regex("^[a-z][-a-z0-9]{4,28}[a-z0-9]$", var.unravel_service_account))
-    error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-)."
+    error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-) and should have atleast 6 characters."
   }
 
 }

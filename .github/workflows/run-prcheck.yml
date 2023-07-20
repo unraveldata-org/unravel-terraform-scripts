@@ -18,7 +18,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          args: --severity-threshold=high
+          args: --severity-threshold=high,medium,low
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1

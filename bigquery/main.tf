@@ -14,9 +14,18 @@ data "google_project" "project" {
 
 # Variables which are constant. Changing these values will result in broken data
 locals {
+  apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com"]
   project_all           = concat(var.project_ids, [var.unravel_project_id])
   project_ids_map       = { for project in toset(local.project_all) : project => project }
   admin_project_ids_map = { for admin_project in toset(var.admin_project_ids) : admin_project => admin_project }
+
+  config_apis = distinct(flatten([
+    for each_project in local.project_all : [
+      for apis in local.apis : {
+        project_id = each_project
+        api_name   = apis
+      }
+  ]]))
 
   # Permission required for the Unravel application to gather metrics and generate insights
   role_permission = concat([
@@ -51,18 +60,19 @@ locals {
   # Sink filter to get only the logs related to bigquery
   sink_filter = "(resource.type=\"bigquery_resource\" AND (protoPayload.methodName=\"jobservice.insert\" OR protoPayload.methodName=\"jobservice.jobcompleted\")) OR resource.type=\"bigquery_dts_config\""
 
+  # Note: For permissions make sure to enable necessary api's as we add new permissions
 }
 
-# Create topics for Unravel Bigquery with Push subscription to Unravel push endpoint
+# Create topics for Unravel Bigquery with Push/Pull subscription
 module "unravel_topics" {
 
   source = "./modules/pubsub"
 
-  project_ids               = local.project_ids_map
-  unravel_push_endpoint     = var.unravel_push_endpoint
-  unravel_push_subscription = var.unravel_push_subscription
-  unravel_pubsub_topic      = var.unravel_pubsub_topic
-  pull_model                = var.pull_model
+  project_ids           = local.project_ids_map
+  unravel_push_endpoint = var.unravel_push_endpoint
+  unravel_subscription  = var.unravel_subscription
+  unravel_pubsub_topic  = var.unravel_pubsub_topic
+  pull_model            = var.pull_model
 
   depends_on = [
   data.google_project.project]
@@ -83,6 +93,7 @@ module "unravel_iam" {
   unravel_service_account       = var.unravel_service_account
   unravel_project_id            = var.unravel_project_id
   key_based_auth_model          = var.key_based_auth_model
+
   depends_on = [
   data.google_project.project]
 
@@ -92,6 +103,7 @@ module "unravel_iam" {
 resource "local_file" "unravel_keys" {
 
   count    = var.key_based_auth_model ? 1 : 0
+
   content  = base64decode(module.unravel_iam.keys.private_key)
   filename = "${var.unravel_keys_location}/${var.unravel_project_id}.json"
 
@@ -107,23 +119,8 @@ module "unravel_sink" {
   pub_sub_ids       = module.unravel_topics.pubsub_ids
   unravel_sink_name = var.unravel_sink_name
 
-  depends_on = [google_project_service.enable_cloud_logging_api]
+  depends_on = [module.google_enable_api]
 
-}
-
-# Pub/sub Publisher policy data
-data "google_iam_policy" "pubsub_access" {
-
-  for_each = local.project_ids_map
-
-  binding {
-    role = "roles/pubsub.publisher"
-
-    members = [
-      module.unravel_sink.sinks[each.value].writer_identity
-
-    ]
-  }
 }
 
 # Attach Pub/Sub Publisher policy to Unravel topic
@@ -137,29 +134,28 @@ resource "google_pubsub_topic_iam_policy" "policy" {
 
 }
 
-# Enable resource manager API
-resource "google_project_service" "enable_cloud_resource_manager_api" {
-  for_each = local.project_ids_map
+# Enable GCP service API
+module "google_enable_api" {
+  source = "./modules/apis"
 
-  project                    = each.value
-  service                    = "cloudresourcemanager.googleapis.com"
-  disable_dependent_services = true
-  disable_on_destroy         = false
+  project_all  = local.project_all
+  service_apis = local.apis
 
   depends_on = [
   data.google_project.project]
+
 }
 
-# Enable cloud logging API
-resource "google_project_service" "enable_cloud_logging_api" {
+# Pub/sub Publisher policy data
+data "google_iam_policy" "pubsub_access" {
+
   for_each = local.project_ids_map
 
-  project                    = each.value
-  service                    = "logging.googleapis.com"
-  disable_dependent_services = true
-  disable_on_destroy         = false
+  binding {
+    role = "roles/pubsub.publisher"
 
-  depends_on = [
-  data.google_project.project]
+    members = [
+      module.unravel_sink.sinks[each.value].writer_identity
+    ]
+  }
 }
-

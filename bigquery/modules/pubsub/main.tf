@@ -8,9 +8,9 @@ resource "google_pubsub_topic" "unravel_topic" {
   message_retention_duration = "604800s"
 }
 
-# Create a push subscription to the PubSub topic
+# Create a push or pull subscription to the PubSub topic based on the input variable pull_model
 resource "google_pubsub_subscription" "unravel_subscription" {
-  name     = var.unravel_push_subscription
+  name     = var.unravel_subscription
   for_each = var.project_ids
 
   project = each.value
@@ -38,6 +38,7 @@ resource "google_pubsub_subscription" "unravel_subscription" {
 
 }
 
+# Enable google pupsub apis if not already enabled.
 resource "google_project_service" "cloud_pubsub_api" {
   for_each = var.project_ids
 
@@ -49,6 +50,10 @@ resource "google_project_service" "cloud_pubsub_api" {
     update = "4m"
   }
 
+  # Note: Terraform will not disable the api during destroy.
+  # This is to ensure that other systems using this api is not effected.
   disable_on_destroy         = false
   disable_dependent_services = false
 }
+
+

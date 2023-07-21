@@ -81,7 +81,7 @@ variable "unravel_keys_location" {
   }
 }
 
-variable "unravel_push_subscription" {
+variable "unravel_subscription" {
 
   description = "Unravel Pub/Sub topic subscription ID"
   type        = string
@@ -89,7 +89,7 @@ variable "unravel_push_subscription" {
   default = "unravel_subscription"
 
   validation {
-    condition     = can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", var.unravel_push_subscription))
+    condition     = can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", var.unravel_subscription))
     error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-), periods (.), underscores (_), tildes (~), percents (%) or plus signs (+). Cannot start with goog."
   }
 }

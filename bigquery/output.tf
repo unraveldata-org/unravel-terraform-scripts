@@ -17,3 +17,8 @@ output "iam" {
 output "subscription_id" {
   value = module.unravel_topics.subscriptions
 }
+
+# List of API's enabled for the projects
+output "api" {
+  value = module.google_enable_api.api
+}

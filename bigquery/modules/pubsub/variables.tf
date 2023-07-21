@@ -9,7 +9,7 @@ variable "unravel_push_endpoint" {
   default     = ""
 }
 
-variable "unravel_push_subscription" {
+variable "unravel_subscription" {
   description = "Unravel push subscription as provided in the intput.tfvars file"
   default     = ""
 }

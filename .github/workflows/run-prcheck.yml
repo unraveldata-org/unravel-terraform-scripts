@@ -26,13 +26,13 @@ jobs:
           terraform_version: latest
 
       - name: Initialize Terraform
-        run: |
-          cd bigquery
-          terraform init
+        run: terraform init
 
       - name: Validate Terraform
         run: terraform validate
 
       - name: Format Terraform
-        run: terraform fmt -check=true -diff=true -recursive
+        run: |
+          cd bigquery
+          terraform fmt -check=true -diff=true -recursive
 

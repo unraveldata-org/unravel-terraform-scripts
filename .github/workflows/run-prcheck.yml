@@ -26,7 +26,9 @@ jobs:
           terraform_version: latest
 
       - name: Initialize Terraform
-        run: terraform init
+        run: |
+          cd bigquery
+          terraform init
 
       - name: Validate Terraform
         run: terraform validate

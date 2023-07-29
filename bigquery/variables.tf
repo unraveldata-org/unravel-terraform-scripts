@@ -1,39 +1,19 @@
-variable "pull_model" {
-  description = "Enables Pull model for PubSub topic"
-  type        = bool
-
-  default = true
-}
-
-variable "project_ids" {
+variable "monitoring_project_ids" {
   description = "GCP Project IDs for configuring Unravel Bigquery. Only those queries running in these projects will be monitored"
   type        = list(string)
 
   validation {
     condition = length([
-      for project in var.project_ids : true
+      for project in var.monitoring_project_ids : true
       if can(regex("[a-z0-9-]+$", project))
-    ]) == length(var.project_ids)
+    ]) == length(var.monitoring_project_ids)
     error_message = "Accepts only GCP project ID and not Project Name. Please provide a valid GCP project ID. Ex: 'tactical-factor-123456'."
   }
 
   validation {
-    condition     = length(var.project_ids) == length(distinct(var.project_ids))
+    condition     = length(var.monitoring_project_ids) == length(distinct(var.monitoring_project_ids))
     error_message = "All project ids must be unique."
   }
-}
-
-variable "unravel_push_endpoint" {
-  description = "Publicly accessible HTTPS Unravel LR endpoint"
-  type        = string
-
-  validation {
-    condition     = can(regex("https://[a-z0-9-._A-Z]+(:[0-9]{2,})?$", var.unravel_push_endpoint))
-    error_message = "Unravel Push endpoint should be a valid publicly accessible HTTPS endpoint without a trailing '/'. Ex: 'https://bigquery.unraveldata.com'."
-  }
-
-  default = "https://devnull.unraveldata.unravel"
-
 }
 
 variable "unravel_project_id" {
@@ -157,11 +137,6 @@ variable "unravel_service_account" {
 
 }
 
-variable "key_based_auth_model" {
-  description = "Enable or disable the key-based authentication model"
-  type        = bool
-  default     = false
-}
 
 variable "x_svc_acc_permissions" {
   description = "List of extended service account permissions required for Unravel VM"
@@ -169,3 +144,35 @@ variable "x_svc_acc_permissions" {
   default     = ["logging.logEntries.create"]
 }
 
+variable "pull_model" {
+  description = "Enables Pull model for PubSub topic"
+  type        = bool
+
+  default = true
+}
+
+variable "unravel_push_endpoint" {
+  description = "Publicly accessible HTTPS Unravel LR endpoint"
+  type        = string
+
+  validation {
+    condition     = can(regex("https://[a-z0-9-._A-Z]+(:[0-9]{2,})?$", var.unravel_push_endpoint))
+    error_message = "Unravel Push endpoint should be a valid publicly accessible HTTPS endpoint without a trailing '/'. Ex: 'https://bigquery.unraveldata.com'."
+  }
+
+  default = "https://devnull.unraveldata.unravel"
+
+}
+
+variable "multi_key_auth_model" {
+  description = "Enables terraform to create One Key for each project"
+  type = bool
+
+  default = false
+}
+
+variable "key_based_auth_model" {
+  description = "Enable or disable the key-based authentication model"
+  type        = bool
+  default     = false
+}

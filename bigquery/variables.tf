@@ -166,7 +166,7 @@ variable "unravel_push_endpoint" {
 
 variable "multi_key_auth_model" {
   description = "Enables terraform to create One Key for each project"
-  type = bool
+  type        = bool
 
   default = false
 }

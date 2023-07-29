@@ -14,9 +14,18 @@ data "google_project" "project" {
 
 # Variables which are constant. Changing these values will result in broken data
 locals {
-  project_all           = concat(var.project_ids, [var.unravel_project_id])
-  project_ids_map       = { for project in toset(local.project_all) : project => project }
+  apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com"]
+  project_ids_map       = { for project in toset(var.monitoring_project_ids) : project => project }
   admin_project_ids_map = { for admin_project in toset(var.admin_project_ids) : admin_project => admin_project }
+
+  config_apis = distinct(flatten([
+    for each_project in var.monitoring_project_ids : [
+
+      for apis in local.apis : {
+        project_id = each_project
+        api_name   = apis
+      }
+  ]]))
 
   # Permission required for the Unravel application to gather metrics and generate insights
   role_permission = concat([
@@ -24,6 +33,7 @@ locals {
     "bigquery.jobs.create",
     "bigquery.jobs.get",
     "bigquery.jobs.listAll",
+    "bigquery.reservationAssignments.search",
     "bigquery.routines.get",
     "bigquery.routines.list",
     "bigquery.tables.get",
@@ -51,18 +61,25 @@ locals {
   # Sink filter to get only the logs related to bigquery
   sink_filter = "(resource.type=\"bigquery_resource\" AND (protoPayload.methodName=\"jobservice.insert\" OR protoPayload.methodName=\"jobservice.jobcompleted\")) OR resource.type=\"bigquery_dts_config\""
 
+  # Note: For permissions make sure to enable necessary api's as we add new permissions
 }
 
-# Create topics for Unravel Bigquery with Push subscription to Unravel push endpoint
+
+resource "random_integer" "unique_id" {
+  max = 5000
+  min = 1
+}
+
+# Create topics for Unravel Bigquery with Push/Pull subscription
 module "unravel_topics" {
 
   source = "./modules/pubsub"
 
-  project_ids               = local.project_ids_map
-  unravel_push_endpoint     = var.unravel_push_endpoint
-  unravel_push_subscription = var.unravel_push_subscription
-  unravel_pubsub_topic      = var.unravel_pubsub_topic
-  pull_model                = var.pull_model
+  project_ids           = local.project_ids_map
+  unravel_push_endpoint = var.unravel_push_endpoint
+  unravel_subscription  = var.unravel_subscription
+  unravel_pubsub_topic  = "${var.unravel_pubsub_topic}-${random_integer.unique_id.id}"
+  pull_model            = var.pull_model
 
   depends_on = [
   data.google_project.project]
@@ -78,11 +95,13 @@ module "unravel_iam" {
   role_permission               = local.role_permission
   admin_project_ids             = local.admin_project_ids_map
   admin_project_role_permission = local.admin_project_role_permission
-  unravel_role                  = var.unravel_role
-  admin_unravel_role            = var.admin_unravel_role
-  unravel_service_account       = var.unravel_service_account
+  unravel_role                  = "${var.unravel_role}_${random_integer.unique_id.id}"
+  admin_unravel_role            = "${var.admin_unravel_role}_${random_integer.unique_id.id}"
+  unravel_service_account       = "${var.unravel_service_account}-${random_integer.unique_id.id}"
   unravel_project_id            = var.unravel_project_id
   key_based_auth_model          = var.key_based_auth_model
+  multi_key_auth_model          = var.multi_key_auth_model
+
   depends_on = [
   data.google_project.project]
 
@@ -91,9 +110,30 @@ module "unravel_iam" {
 # Write decoded Service account private keys to filesystem
 resource "local_file" "unravel_keys" {
 
-  count    = var.key_based_auth_model ? 1 : 0
-  content  = base64decode(module.unravel_iam.keys.private_key)
+  count = var.key_based_auth_model ? 1 : 0
+
+  content  = base64decode(module.unravel_iam.keys[0].private_key)
   filename = "${var.unravel_keys_location}/${var.unravel_project_id}.json"
+
+}
+
+# Write decoded Service account private keys to filesystem
+resource "local_file" "unravel_project_keys" {
+
+  for_each = var.multi_key_auth_model ? local.project_ids_map : {}
+
+  content  = base64decode(module.unravel_iam.project_keys[each.value].private_key)
+  filename = "${var.unravel_keys_location}/${each.value}.json"
+
+}
+
+# Write decoded Service account private keys to filesystem
+resource "local_file" "unravel_admin_keys" {
+
+  for_each = var.multi_key_auth_model ? local.admin_project_ids_map : {}
+
+  content  = base64decode(module.unravel_iam.admin_keys[each.value].private_key)
+  filename = "${var.unravel_keys_location}/${each.value}.json"
 
 }
 
@@ -105,25 +145,10 @@ module "unravel_sink" {
   project_ids       = local.project_ids_map
   sink_filter       = local.sink_filter
   pub_sub_ids       = module.unravel_topics.pubsub_ids
-  unravel_sink_name = var.unravel_sink_name
+  unravel_sink_name = "${var.unravel_sink_name}-${random_integer.unique_id.id}"
 
-  depends_on = [google_project_service.enable_cloud_logging_api]
+  depends_on = [module.google_enable_api]
 
-}
-
-# Pub/sub Publisher policy data
-data "google_iam_policy" "pubsub_access" {
-
-  for_each = local.project_ids_map
-
-  binding {
-    role = "roles/pubsub.publisher"
-
-    members = [
-      module.unravel_sink.sinks[each.value].writer_identity
-
-    ]
-  }
 }
 
 # Attach Pub/Sub Publisher policy to Unravel topic
@@ -137,29 +162,47 @@ resource "google_pubsub_topic_iam_policy" "policy" {
 
 }
 
-# Enable resource manager API
-resource "google_project_service" "enable_cloud_resource_manager_api" {
-  for_each = local.project_ids_map
+# Enable GCP service API
+module "google_enable_api" {
+  source = "./modules/apis"
 
-  project                    = each.value
-  service                    = "cloudresourcemanager.googleapis.com"
-  disable_dependent_services = true
-  disable_on_destroy         = false
+  project_all = var.multi_key_auth_model ? var.monitoring_project_ids : concat(var.monitoring_project_ids, [var.unravel_project_id])
 
-  depends_on = [
-  data.google_project.project]
-}
-
-# Enable cloud logging API
-resource "google_project_service" "enable_cloud_logging_api" {
-  for_each = local.project_ids_map
-
-  project                    = each.value
-  service                    = "logging.googleapis.com"
-  disable_dependent_services = true
-  disable_on_destroy         = false
+  service_apis = local.apis
 
   depends_on = [
   data.google_project.project]
+
 }
 
+# Pub/sub Publisher policy data
+data "google_iam_policy" "pubsub_access" {
+
+  for_each = local.project_ids_map
+
+  binding {
+    role = "roles/pubsub.publisher"
+
+    members = [
+      module.unravel_sink.sinks[each.value].writer_identity
+    ]
+  }
+}
+
+# Enable google pupsub apis if not already enabled.
+resource "google_project_service" "cloud_pubsub_api_unravel" {
+  count = var.multi_key_auth_model ? 0 : 1
+
+  project = var.unravel_project_id
+  service = "pubsub.googleapis.com"
+
+  timeouts {
+    create = "4m"
+    update = "4m"
+  }
+
+  # Note: Terraform will not disable the api during destroy.
+  # This is to ensure that other systems using this api is not effected.
+  disable_on_destroy         = false
+  disable_dependent_services = false
+}

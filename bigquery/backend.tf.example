@@ -1,6 +1,6 @@
 terraform {
-  backend "local" {
-    path = "../data/terraform.tfstate"
+  backend "gcs" {
+    bucket  = "unravel-tf-state"
+    prefix  = "unravel-terraform/state"
   }
 }
-

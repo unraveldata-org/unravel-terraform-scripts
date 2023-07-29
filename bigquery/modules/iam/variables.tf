@@ -45,3 +45,8 @@ variable "key_based_auth_model" {
   type        = bool
   default     = false
 }
+
+variable "multi_key_auth_model" {
+  description = "Terraform will create service account and keys in each GCP projects"
+}
+

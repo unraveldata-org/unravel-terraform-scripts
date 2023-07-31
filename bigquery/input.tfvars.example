@@ -1,0 +1,15 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# Parameters for Unravel Observability tool configuration in GCP
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# [Required] GCP Project IDs to configure Unravel.
+monitoring_project_ids = ["unravel-gcp-project-1", "unravel-gcp-project-2"]
+
+# [Required] GCP Project ID where the Unravel is running
+unravel_project_id = "unravel-project-id"
+
+# [Optional] GCP admin project ID if using Collections and Reservations
+admin_project_ids = ["gcp-admin-project-1"]
+

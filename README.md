@@ -1,6 +1,7 @@
 ![Unravel](https://www.unraveldata.com/wp-content/themes/unravel-child/src/images/unLogo.svg)  
 
 # Unravel Cloud Platform Integration scripts
+
 ![Terraform Workflow](https://github.com/unraveldata-org/unravel-terraform-scripts/actions/workflows/run-prcheck.yml/badge.svg)
 
 Welcome to Unravel's Terraform Script repository! Here, you will find the essential Terraform scripts required for  integrating Unravel with your cloud platform.

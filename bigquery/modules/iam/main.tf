@@ -1,7 +1,7 @@
 
 locals {
 
-  all_project_ids    = merge(var.project_ids, var.admin_project_ids)
+  all_project_ids = merge(var.project_ids, var.admin_project_ids)
   unravel_project_id = { for project in toset([var.unravel_project_id]) : project => project }
 }
 
@@ -44,7 +44,7 @@ resource "google_service_account" "unravel_service_account" {
 # New service account for Unravel
 resource "google_service_account" "project_service_account" {
 
-  for_each = var.multi_key_auth_model ? var.project_ids : {}
+  for_each = var.multi_key_auth_model ? var.project_ids: {}
 
   project      = each.value
   account_id   = var.unravel_service_account

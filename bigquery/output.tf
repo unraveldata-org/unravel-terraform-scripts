@@ -57,5 +57,5 @@ output "project_binding" {
 }
 
 output "unravel_binding" {
-  value = var.key_based_auth_model ? null : module.unravel_iam.unravel_binding
+    value = var.key_based_auth_model ? null : module.unravel_iam.unravel_binding
 }

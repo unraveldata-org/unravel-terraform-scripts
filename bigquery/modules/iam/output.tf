@@ -1,7 +1,7 @@
 
 # Service account Key
 output "keys" {
-  value = var.key_based_auth_model ? google_service_account_key.unravel_key : null
+  value = var.key_based_auth_model ? google_service_account_key.unravel_key: null
 }
 
 # Service account Key

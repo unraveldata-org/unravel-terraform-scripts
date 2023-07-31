@@ -95,12 +95,12 @@ module "unravel_iam" {
   role_permission               = local.role_permission
   admin_project_ids             = local.admin_project_ids_map
   admin_project_role_permission = local.admin_project_role_permission
-  unravel_role                  = "${var.unravel_role}_${random_integer.unique_id.id}"
+    unravel_role                  = "${var.unravel_role}_${random_integer.unique_id.id}"
   admin_unravel_role            = "${var.admin_unravel_role}_${random_integer.unique_id.id}"
   unravel_service_account       = "${var.unravel_service_account}-${random_integer.unique_id.id}"
   unravel_project_id            = var.unravel_project_id
   key_based_auth_model          = var.key_based_auth_model
-  multi_key_auth_model          = var.multi_key_auth_model
+  multi_key_auth_model  = var.multi_key_auth_model
 
   depends_on = [
   data.google_project.project]
@@ -166,7 +166,7 @@ resource "google_pubsub_topic_iam_policy" "policy" {
 module "google_enable_api" {
   source = "./modules/apis"
 
-  project_all = var.multi_key_auth_model ? var.monitoring_project_ids : concat(var.monitoring_project_ids, [var.unravel_project_id])
+  project_all  = var.multi_key_auth_model ? var.monitoring_project_ids : concat(var.monitoring_project_ids,[var.unravel_project_id])
 
   service_apis = local.apis
 

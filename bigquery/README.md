@@ -1,5 +1,5 @@
+![Unravel](https://www.unraveldata.com/wp-content/themes/unravel-child/src/images/unLogo.svg)  
 # GCP Resource Creation and Configuration for Unravel Bigquery Integration
-[![Known Vulnerabilities](https://snyk.io/test/github/unraveldata-org/unravel-terraform-scripts/badge.svg)]
 
 Project for managing Unravel Bigquery GCP resource configuration! This project aims to simplify the process of setting up and managing Google Cloud resources using Terraform. Below are the instructions to get started:
 
@@ -27,17 +27,74 @@ To authenticate gcloud, execute the following commands:
 gcloud init
 gcloud auth application-default login
 ```
+## Configuration and Installation
+Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These project can be classified in to 3 based on the charecterestics.
+
+1. Monitoring projects: Projects where Biquery jobs are running and needs to be integrated with Unravel. Mostly all the projects will come uder this.
+2. Admin Project: Project(s) where Bigquery Slot reservations/Commitments are defined. This Project may or may not be running Bigquery jobs.
+3. Unravel Projects: The Project where Unravel VM is installed. It may or may not be running Bigquery jobs. 
+
+Unravel supports three different authentication models for querying BigQuery API/logs:
+
+1. VM Identity based authentication.
+2. Single Key based authentication.
+3. Multiple Key based authentication.
+
+### VM Identity based authentication.
+In this authentication model, A "Master service account" will be created under the "Unravel Project" and IAM roles will be created in each "Monitoring projects", "Admin Projects" and "Unravel Projects". Finally, these roles will be binded to the "Master Service account" created under the "Unravel Project".
+
+The next step involves assigning the "Master Service account" to the Unravel VM. After Terraform creates the required resources, you must perform a one-time manual task: Stop the Unravel VM, change the Service account to the "Master Service account," and then restart the VM and Unravel.
+
+### Single Key based authentication.
+Similar to the VM Identity-based authentication model, a "Master service account" is created under the "Unravel Project," and IAM roles are set up in each "Monitoring Project," "Admin Project," and "Unravel Project." These roles are associated with the "Master Service account" in the "Unravel Project."
+
+However, in this model, instead of assigning the "Master service account" to the VM, we generate a key for the "Master Service account." This key will be used by Unravel to gain access.
+
+### Multiple Key based authentication.
+In the Multikey based authentication model, an IAM role and a service account will be created in each project (Monitoring, Admin, and Unravel Projects). These roles and service accounts will be associated with one another, and a key will be generated for each project.
+
+Choose the authentication model that best fits your requirements, 
+
 ## Create Terraform Input File
-To start using the project, create a Terraform input file and update it with your GCP project IDs:
+Begin by duplicating the provided example input file, input.tfvars.example, and renaming it as input.tfvars. This will serve as your working copy, where you'll input your specific project details.
 
 ```bash
 cp input.tfvars.example input.tfvars
 ```
-There are three major variables to update.
 
-unravel_project_id [Required]:  The GCP Project ID where the Unravel VM is installed.
-admin_project_ids [Optional]: The list of Admin Project IDs where the Bigquery slot reservations are configured.
-project_ids [Required]: The list of Project IDs where the Bigquery Jobs are running and needs to be monitored.
+### Configuring for VM Identity based authentication.
+Following variables should be updated.
+
+**unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
+
+**monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+
+**admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+
+**key_based_authentication** (Required)(bool) : Set this variable as `false` 
+
+### Configuring for Single Key based authentication.
+Following variables should be updated.
+
+**unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
+
+**monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+
+**admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+
+**key_based_authentication** (Required)(bool) : Set this variable as `true` 
+
+### Configuring for Multi Key based authentication.
+Following variables should be updated.
+
+**monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+
+**admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+
+**key_based_authentication** (Required)(bool) : Set this variable as `false` 
+
+**multi_key_based_auth** (Required)(bool) : Set this variable as `true`
+
 
 ## Configuring Terraform Backend.
 It is always recommended to keep the state file in a central storage. Pleease configure `backend.tf` file in the repo to use Google Storage as your Terraform statefile storage.

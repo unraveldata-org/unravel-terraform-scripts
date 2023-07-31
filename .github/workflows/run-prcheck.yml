@@ -3,7 +3,7 @@ name: Terraform CI
 on:
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   terraform:
@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Vulnerability scan
+        uses: snyk/actions/iac@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=critical --report
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
@@ -25,5 +32,7 @@ jobs:
         run: terraform validate
 
       - name: Format Terraform
-        run: terraform fmt -check=true -diff=true -recursive
+        run: |
+          cd bigquery
+          terraform fmt -check=true -diff=true -recursive
 

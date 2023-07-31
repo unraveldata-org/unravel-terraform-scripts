@@ -1,6 +1,7 @@
 ![Unravel](https://www.unraveldata.com/wp-content/themes/unravel-child/src/images/unLogo.svg)  
 # GCP Resource Creation and Configuration for Unravel Bigquery Integration
 ![BigQuery](https://cdn.holistics.io/landing/databases/bigquery.png)
+
 Project for managing Unravel Bigquery GCP resource configuration! This project aims to simplify the process of setting up and managing Google Cloud resources using Terraform. Below are the instructions to get started:
 
 ## Prerequisites

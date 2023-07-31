@@ -1,3 +1,5 @@
+![Unravel](https://www.unraveldata.com/wp-content/themes/unravel-child/src/images/unLogo.svg)  
+
 # Terraform Scripts: Unravel Cloud Platform Integration
 Welcome to Unravel's Terraform Script repository! Here, you will find the essential Terraform scripts required for  integrating Unravel with your cloud platform.
 

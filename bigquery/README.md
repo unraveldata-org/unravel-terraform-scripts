@@ -1,5 +1,6 @@
 ![Unravel](https://www.unraveldata.com/wp-content/themes/unravel-child/src/images/unLogo.svg)  
 # GCP Resource Creation and Configuration for Unravel Bigquery Integration
+![Terraform Workflow](https://github.com/unraveldata-org/unravel-terraform-scripts/actions/workflows/run-prcheck.yml/badge.svg)
 
 Project for managing Unravel Bigquery GCP resource configuration! This project aims to simplify the process of setting up and managing Google Cloud resources using Terraform. Below are the instructions to get started:
 

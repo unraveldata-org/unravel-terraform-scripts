@@ -65,35 +65,35 @@ cp input.tfvars.example input.tfvars
 ### Configuring for VM Identity based authentication.
 Following variables should be updated.
 
-unravel_project_id [Required](string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
+**unravel_project_id** [Required](string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
 
-monitoring_project_ids [Required](list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+**monitoring_project_ids** [Required](list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
 
-admin_project_ids [Optional](list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+**admin_project_ids** [Optional](list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
-key_based_authentication [Required](bool) : Set this variable as `false` 
+**key_based_authentication** [Required](bool) : Set this variable as `false` 
 
 ### Configuring for Single Key based authentication.
 Following variables should be updated.
 
-unravel_project_id [Required](string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
+**unravel_project_id** [Required](string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
 
-monitoring_project_ids [Required](list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+**monitoring_project_ids** [Required](list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
 
-admin_project_ids [Optional](list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+**admin_project_ids** [Optional](list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
-key_based_authentication [Required](bool) : Set this variable as `true` 
+**key_based_authentication** [Required](bool) : Set this variable as `true` 
 
 ### Configuring for Multi Key based authentication.
 Following variables should be updated.
 
-monitoring_project_ids [Required](list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+**monitoring_project_ids** [Required](list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
 
-admin_project_ids [Optional](list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+**admin_project_ids** [Optional](list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
-key_based_authentication [Required](bool) : Set this variable as `false` 
+**key_based_authentication** [Required](bool) : Set this variable as `false` 
 
-multi_key_based_auth [Required](bool) : Set this variable as `true`
+**multi_key_based_auth** [Required](bool) : Set this variable as `true`
 
 
 ## Configuring Terraform Backend.

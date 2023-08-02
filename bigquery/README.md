@@ -72,7 +72,7 @@ Following variables should be updated.
 
 **admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
-**key_based_authentication** (Required)(bool) : Set this variable as `false` 
+**key_based_auth_model** (Required)(bool) : Set this variable as `false` 
 
 ### Configuring for Single Key based authentication.
 Following variables should be updated.
@@ -83,7 +83,7 @@ Following variables should be updated.
 
 **admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
-**key_based_authentication** (Required)(bool) : Set this variable as `true` 
+**key_based_auth_model** (Required)(bool) : Set this variable as `true` 
 
 ### Configuring for Multi Key based authentication.
 Following variables should be updated.
@@ -92,9 +92,9 @@ Following variables should be updated.
 
 **admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
-**key_based_authentication** (Required)(bool) : Set this variable as `false` 
+**key_based_auth_model** (Required)(bool) : Set this variable as `false` 
 
-**multi_key_based_auth** (Required)(bool) : Set this variable as `true`
+**multi_key_auth_model** (Required)(bool) : Set this variable as `true`
 
 
 ## Configuring Terraform Backend.

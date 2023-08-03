@@ -20,16 +20,16 @@ unravel_subscription = "unravel-bigquery-sub"
 # [Required] Authentication mode of unravel, 
 # 1. Single Key based
 #	key_based_auth_model = true
-#	multi_key_based_auth = false
+#	multi_key_auth_model = false
 #
 # 2. VM role based  [default]
 #	key_based_auth_model = false
-#       multi_key_based_auth = false
+#       multi_key_auth_model = false
 #
 # 3. Multi Key based authentication
 #       key_based_auth_model = false
-#       multi_key_based_auth = true
+#       multi_key_auth_model = true
 #
 key_based_auth_model = false
-multi_key_based_auth = false
+multi_key_auth_model = false
 

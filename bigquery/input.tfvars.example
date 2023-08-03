@@ -22,7 +22,7 @@ unravel_subscription = "unravel-bigquery-sub"
 #	key_based_auth_model = true
 #	multi_key_auth_model = false
 #
-# 2. VM role based  [default]
+# 2. VM Identity based  [default]
 #	key_based_auth_model = false
 #       multi_key_auth_model = false
 #

@@ -63,7 +63,7 @@ Begin by duplicating the provided example input file, input.tfvars.example, and 
 cp input.tfvars.example input.tfvars
 ```
 
-### Configuring for VM Identity based authentication.
+### Creating resources for VM Identity based authentication.
 Following variables should be updated.
 
 **unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
@@ -74,7 +74,7 @@ Following variables should be updated.
 
 **key_based_auth_model** (Required)(bool) : Set this variable as `false` 
 
-### Configuring for Single Key based authentication.
+### Creating resources for Single Key based authentication.
 Following variables should be updated.
 
 **unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
@@ -85,7 +85,7 @@ Following variables should be updated.
 
 **key_based_auth_model** (Required)(bool) : Set this variable as `true` 
 
-### Configuring for Multi Key based authentication.
+### Creating resources for Multi Key based authentication.
 Following variables should be updated.
 
 **monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
@@ -113,6 +113,78 @@ terraform init
 terraform plan --var-file=input.tfvars
 terraform apply --var-file=input.tfvars
 ```
+## Configuring GCP resources with Unravel
+After creating the resources, it has to be configured with Unravel.
+
+The process of configuring Google Cloud Platform (GCP) resources through Unravel is elucidated in the following sections.
+
+### Configuring for VM Identity based authentication with Unravel
+To establish VM identity-based authentication with Unravel, the subsequent commands has to be executed.
+
+1. Set the authentication mode for the system and furnish the Unravel project ID.
+```bash
+<Unravel_installation_path>/manager config bigquery set-auth-mode vm <unravel_project_id>
+```
+2. Integrate Monitoring projects into Unravel.
+```bash
+<Unravel_installation_path>/manager config bigquery <project_id> <unravel_subscription_name>
+ ```
+3. Incorporate Admin projects into Unravel.
+```bash
+<Unravel_installation_path>/manager config bigquery <project_id> --is-admin --no-monitoring 
+```
+4. Add an Admin project that also serves as a Monitoring project.
+```bash
+<Unravel_installation_path>l/manager config bigquery <project_id> <unravel_subscription_name> --is-admin
+```
+
+### Configuring for Single Key based authentication with Unravel
+To establish Single key based authentication with Unravel, the subsequent commands has to be executed.
+
+1. Set the authentication mode for the system and furnish the Unravel project ID
+```bash
+<Unravel_installation_path>/manager config bigquery set-auth-mode single <unravel_project_id>
+```
+2.  Integrate Monitoring projects into Unravel.
+```bash
+<Unravel_installation_path>/manager config bigquery <project_id> <unravel_subscription_name> --credentials <path_to_crentials_file>
+ ```
+3. Incorporate Admin projects into Unravel.
+```bash
+<Unravel_installation_path>/manager config bigquery <project_id> --is-admin --no-monitoring --credentials <path_to_crentials_file>
+```
+4. Add an Admin project that also serves as a Monitoring project.
+```bash
+<Unravel_installation_path>l/manager config bigquery <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_crentials_file>
+```
+
+The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory.
+Since this authentication method employs a single key, one file can be utilized for all projects.
+
+### Configuring for Multi Key based authentication.
+To establish Multi key based authentication with Unravel, the subsequent commands has to be executed.
+
+1.  Set the authentication mode for the system and furnish the Unravel project ID
+```bash
+<Unravel_installation_path>/manager config bigquery set-auth-mode multi <unravel_project_id>
+````
+
+2. Integrate Monitoring projects into Unravel.
+```bash
+<Unravel_installation_path>/manager config bigquery <project_id> <unravel_subscription_name> --credentials <path_to_crentials_file>
+ ```
+3. Incorporate Admin projects into Unravel.
+```bash
+<Unravel_installation_path>/manager config bigquery <project_id> --is-admin --no-monitoring --credentials <path_to_crentials_file>
+```
+4. Add an Admin project that also serves as a Monitoring project.
+```bash
+<Unravel_installation_path>l/manager config bigquery <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_crentials_file>
+```
+
+The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory. 
+As Multi Key-based authentication generates a unique key for each added project, please utilize the respective key file named after 
+the project ID.
 
 ## List the Resources Created by Terraform
 To view a list of resources created by Terraform, execute the following command:

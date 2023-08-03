@@ -76,7 +76,7 @@ variable "unravel_subscription" {
   description = "Unravel Pub/Sub topic subscription ID"
   type        = string
 
-  default = "unravel_subscription"
+  default = "unravel-bigquery-sub"
 
   validation {
     condition     = can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", var.unravel_subscription))

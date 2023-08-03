@@ -8,11 +8,6 @@ output "pub_sub" {
   value = module.unravel_topics.pubsub_ids
 }
 
-# IAM service accounts created by terraform
-output "iam_role" {
-  value = module.unravel_iam.iam_role
-}
-
 # Pub/Sub subscription id created by terraform
 output "subscription_id" {
   value = module.unravel_topics.subscriptions
@@ -24,38 +19,47 @@ output "api" {
 }
 
 # Service account created and it's attributes
-output "service_account" {
-  value = module.unravel_iam.service_account
-}
-
-# Service account created and it's attributes
-output "monitoring_service_account" {
-  value = module.unravel_iam.monitoring_service_account
-}
-
-# Service account created and it's attributes
-output "admin_service_account" {
-  value = module.unravel_iam.admin_service_account
+output "unravel_service_account" {
+  value = var.multi_key_auth_model ? null : module.unravel_iam.unravel_service_account
 }
 
 # IAM roles created and it's attributes
-output "monitoring_am_role" {
-  value = module.unravel_iam.iam_role
+output "project_iam_role" {
+  value = module.unravel_iam.project_iam_role
 }
 
-# IAM roles created for admin accounts
-output "admin_iam_role" {
-  value = module.unravel_iam.admin_iam_role
+output "multi_key_project_service_accounts" {
+  value = var.multi_key_auth_model ? module.unravel_iam.multi_key_project_service_accounts : null
+}
+output "multi_key_project_binding" {
+  value = var.multi_key_auth_model ? module.unravel_iam.multi_key_project_binding : null
 }
 
-output "admin_binding" {
-  value = module.unravel_iam.admin_binding
+output "admin_project_unravel_role" {
+  value = module.unravel_iam.admin_project_unravel_role
 }
 
-output "project_binding" {
-  value = module.unravel_iam.project_binding
+output "multi_key_admin_service_accounts" {
+  value = var.multi_key_auth_model ? module.unravel_iam.multi_key_admin_service_accounts : null
+}
+
+output "admin_unravel_iam" {
+  value = var.multi_key_auth_model ? null : module.unravel_iam.admin_unravel_iam
+}
+
+output "multi_key_admin_binding" {
+  value = var.multi_key_auth_model ? module.unravel_iam.multi_key_admin_binding : null
 }
 
 output "unravel_binding" {
-  value = var.key_based_auth_model ? null : module.unravel_iam.unravel_binding
+  value = var.multi_key_auth_model ? null : module.unravel_iam.unravel_binding
 }
+
+output "admin_only_project_binding" {
+  value = var.multi_key_auth_model ? module.unravel_iam.admin_only_project_binding : null
+}
+
+output "admin_and_monitoring_project_binding" {
+  value = var.multi_key_auth_model ? module.unravel_iam.admin_and_monitoring_project_binding : null
+}
+

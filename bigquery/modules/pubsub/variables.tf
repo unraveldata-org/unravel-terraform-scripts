@@ -23,4 +23,3 @@ variable "pull_model" {
   description = "Boolean flag to toggle pull / push model subscription"
   default     = true
 }
-

@@ -14,9 +14,11 @@ output "project_iam_role" {
   value = google_project_iam_custom_role.unravel_role
 }
 
+# Service accounts created for projects when multi auth mode is eanbled
 output "multi_key_project_service_accounts" {
   value = var.multi_key_auth_model ? google_service_account.multi_key_project_service_accounts : null
 }
+
 output "multi_key_project_binding" {
   value = var.multi_key_auth_model ? google_project_iam_member.multi_key_project_unravel_iam : null
 }
@@ -44,6 +46,7 @@ output "unravel_binding" {
 output "admin_only_project_binding" {
   value = google_project_iam_member.multi_key_admin_unravel_iam
 }
+
 output "admin_and_monitoring_project_binding" {
   value = google_project_iam_member.multi_key_admin_n_project_unravel_iam
 }

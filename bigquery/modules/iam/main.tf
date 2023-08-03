@@ -60,7 +60,6 @@ resource "local_file" "project_keys" {
   filename = "${var.unravel_keys_location}/${each.value}.json"
 
 }
-##########################
 
 ### Admin Projects ###
 
@@ -109,7 +108,7 @@ resource "google_project_iam_member" "multi_key_admin_n_project_unravel_iam" {
 }
 
 
-# Generate base64 encoded key for Unravel service account
+# Generate base64 encoded key for Admin Unravel service account
 resource "google_service_account_key" "admin_unravel_key" {
 
   for_each = var.multi_key_auth_model ? var.admin_only_project_ids_map : {}
@@ -119,7 +118,7 @@ resource "google_service_account_key" "admin_unravel_key" {
   depends_on = [google_project_iam_member.multi_key_admin_unravel_iam]
 }
 
-# Write decoded Service account private keys to filesystem
+# Write decoded Admin Service account private keys to filesystem
 resource "local_file" "admin_keys" {
 
   for_each = var.multi_key_auth_model ? var.admin_only_project_ids_map : {}
@@ -128,8 +127,6 @@ resource "local_file" "admin_keys" {
   filename = "${var.unravel_keys_location}/${each.value}.json"
 
 }
-
-#################
 
 ### Unravel Project and single/vm based ###
 
@@ -186,4 +183,3 @@ resource "local_file" "unravel_keys" {
 
 }
 
-#######################

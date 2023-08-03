@@ -74,7 +74,7 @@ Following variables should be updated.
 
 **key_based_auth_model** (Required)(bool) : Set this variable as `false` 
 
-**NB:** Once created, locate the service account name created by terrafrom using the following command and attach that service account to Unravel VM manually. This requires the VM to be shutdown and restarted.
+**NB:** Once created, locate the service account name created by terraform using the following command and attach that service account to Unravel VM manually. This requires the VM to be shutdown and restarted.
 
 ```bash
 terraform output unravel_service_account

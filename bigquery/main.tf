@@ -14,7 +14,7 @@ data "google_project" "project" {
 
 # Variables which are constant. Changing these values will result in broken data
 locals {
-  apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com"]
+  apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com", "bigqueryreservation.googleapis.com"]
   admin_apis            = ["cloudresourcemanager.googleapis.com"]
   project_ids_map       = { for project in toset(var.monitoring_project_ids) : project => project }
   admin_project_ids_map = { for admin_project in toset(var.admin_project_ids) : admin_project => admin_project }
@@ -66,6 +66,7 @@ locals {
   sink_filter = "(resource.type=\"bigquery_resource\" AND ((protoPayload.methodName=\"jobservice.insert\" AND  protoPayload.serviceData.jobInsertResponse.resource.jobName.jobId :*) OR (protoPayload.methodName=\"jobservice.jobcompleted\" AND protoPayload.serviceData.jobCompletedEvent.job.jobName.jobId :*))) OR (resource.type=\"bigquery_dts_config\" AND (labels.run_id :* AND resource.labels.config_id :*))"
   # Note: For permissions make sure to enable necessary api's as we add new permissions
 }
+
 # Generates a random integer used to name the resources to be unique
 resource "random_integer" "unique_id" {
   max = 5000

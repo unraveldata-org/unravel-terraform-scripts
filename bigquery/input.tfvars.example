@@ -7,7 +7,7 @@
 # [Required] GCP Project IDs to configure Unravel.
 project_ids = ["unravel-gcp-project-1", "unravel-gcp-project-2"]
 
-# [Required] GCP Project ID where the Unravel is running
+# [Required] GCP Project ID where the Unravel is running. Only required for VM and Single Auth model.
 unravel_project_id = "unravel-project-id"
 
 # [Optional] GCP admin project ID if using Collections and Reservations
@@ -19,11 +19,11 @@ unravel_subscription = "unravel-bigquery-sub"
 
 # [Required] Authentication mode of unravel, 
 # 1. Single Key based
-#	key_based_auth_model = true
-#	multi_key_auth_model = false
+#       key_based_auth_model = true
+#       multi_key_auth_model = false
 #
 # 2. VM Identity based  [default]
-#	key_based_auth_model = false
+#       key_based_auth_model = false
 #       multi_key_auth_model = false
 #
 # 3. Multi Key based authentication

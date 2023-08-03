@@ -34,7 +34,7 @@ Within the repository, navigate to the specific Data platform folder (e.g., bigq
 Update the Terraform variables and input files with the necessary information for your cloud environment. These variables include project IDs and any specific configuration parameters required by Unravel.
 
 ### Terraform Deployment
-Specific steps of terrafrom deployemnt can be found in the respective directory of your Data Platform. Please review the execution plan carefully before applying changes.
+Specific steps of terraform deployment can be found in the respective directory of your Data Platform. Please review the execution plan carefully before applying changes.
 
 ## Documentation
 For detailed instructions on configuring Unravel with your specific cloud platform, refer to the respective directories' README files (e.g., bigquery/README.md). These README files contain platform-specific documentation, guidelines, and best practices to assist you in the integration process.

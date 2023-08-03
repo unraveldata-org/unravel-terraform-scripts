@@ -14,4 +14,22 @@ unravel_project_id = "unravel-project-id"
 admin_project_ids = ["gcp-admin-project-1"]
 
 # [Optional] Push subscription ID. Default value is "unravel-push-subscription".
+# Please note to use the same name while running manager config bigquery add <project> <unravel_subscription>
 unravel_subscription = "unravel-subscription"
+
+# [Required] Authentication mode of unravel, 
+# 1. Single Key based
+#	key_based_auth_model = true
+#	multi_key_based_auth = false
+#
+# 2. VM role based  [default]
+#	key_based_auth_model = false
+#       multi_key_based_auth = false
+#
+# 3. Multi Key based authentication
+#       key_based_auth_model = false
+#       multi_key_based_auth = true
+#
+key_based_auth_model = false
+multi_key_based_auth = false
+

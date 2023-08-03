@@ -1,6 +1,6 @@
 variable "project_ids" {
   description = "List of projects ids from input.tfvars file in key value pair"
-  default = {}
+  default     = {}
 }
 
 variable "unravel_push_endpoint" {

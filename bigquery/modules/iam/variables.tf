@@ -41,18 +41,20 @@ variable "unravel_project_id" {
 }
 
 variable "key_based_auth_model" {
-  description = "Key-based authorization flag"
+  description = "Key-based authentication flag"
   type        = bool
   default     = false
 }
 
 variable "multi_key_auth_model" {
-  type = bool
+  description = "Multi key based authentication flag"
+  type        = bool
 }
 
 variable "unravel_keys_location" {
-  type    = string
-  default = "./keys"
+  description = "Local Filesystem location to write the files"
+  type        = string
+  default     = "./keys"
 }
 
 variable "admin_only_project_ids_map" {

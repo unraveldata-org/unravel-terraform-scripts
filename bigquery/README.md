@@ -74,6 +74,11 @@ Following variables should be updated.
 
 **key_based_auth_model** (Required)(bool) : Set this variable as `false` 
 
+**NB:** Once created, locate the service account name created by terrafrom using the following command and attach that service account to Unravel VM manually. This requires the VM to be shutdown and restarted.
+
+```bash
+terraform output unravel_service_account
+```
 ### Creating resources for Single Key based authentication.
 Following variables should be updated.
 
@@ -127,15 +132,15 @@ To establish VM identity-based authentication with Unravel, the subsequent comma
 ```
 2. Integrate Monitoring projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery <project_id> <unravel_subscription_name>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name>
  ```
 3. Incorporate Admin projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery <project_id> --is-admin --no-monitoring 
+<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring 
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery <project_id> <unravel_subscription_name> --is-admin
+<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin
 ```
 
 ### Configuring for Single Key based authentication with Unravel
@@ -147,15 +152,15 @@ To establish Single key based authentication with Unravel, the subsequent comman
 ```
 2.  Integrate Monitoring projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery <project_id> <unravel_subscription_name> --credentials <path_to_crentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials <path_to_credentials_file>
  ```
 3. Incorporate Admin projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery <project_id> --is-admin --no-monitoring --credentials <path_to_crentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials <path_to_credentials_file>
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_crentials_file>
+<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
 ```
 
 The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory.
@@ -168,18 +173,17 @@ To establish Multi key based authentication with Unravel, the subsequent command
 ```bash
 <Unravel_installation_path>/manager config bigquery set-auth-mode multi <unravel_project_id>
 ````
-
 2. Integrate Monitoring projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery <project_id> <unravel_subscription_name> --credentials <path_to_crentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials <path_to_credentials_file>
  ```
 3. Incorporate Admin projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery <project_id> --is-admin --no-monitoring --credentials <path_to_crentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials <path_to_credentials_file>
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_crentials_file>
+<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
 ```
 
 The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory. 

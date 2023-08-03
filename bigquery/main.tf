@@ -66,13 +66,11 @@ locals {
   sink_filter = "(resource.type=\"bigquery_resource\" AND ((protoPayload.methodName=\"jobservice.insert\" AND  protoPayload.serviceData.jobInsertResponse.resource.jobName.jobId :*) OR (protoPayload.methodName=\"jobservice.jobcompleted\" AND protoPayload.serviceData.jobCompletedEvent.job.jobName.jobId :*))) OR (resource.type=\"bigquery_dts_config\" AND (labels.run_id :* AND resource.labels.config_id :*))"
   # Note: For permissions make sure to enable necessary api's as we add new permissions
 }
-
+# Generates a random integer used to name the resources to be unique
 resource "random_integer" "unique_id" {
   max = 5000
   min = 1
 }
-
-
 
 # Create topics for Unravel Bigquery with Push/Pull subscription
 module "unravel_topics" {

@@ -15,12 +15,15 @@ data "google_project" "project" {
 # Variables which are constant. Changing these values will result in broken data
 locals {
   apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com"]
+  admin_apis            = ["cloudresourcemanager.googleapis.com"]
   project_ids_map       = { for project in toset(var.monitoring_project_ids) : project => project }
   admin_project_ids_map = { for admin_project in toset(var.admin_project_ids) : admin_project => admin_project }
 
+  admin_only_project_ids_map          = { for admin_project in setsubtract(var.admin_project_ids, var.monitoring_project_ids) : admin_project => admin_project }
+  admin_and_monitoring_project_id_map = { for admin_project in setintersection(var.admin_project_ids, var.monitoring_project_ids) : admin_project => admin_project }
+
   config_apis = distinct(flatten([
     for each_project in var.monitoring_project_ids : [
-
       for apis in local.apis : {
         project_id = each_project
         api_name   = apis
@@ -55,20 +58,21 @@ locals {
   admin_project_role_permission = [
     "bigquery.capacityCommitments.list",
     "bigquery.jobs.create",
-    "bigquery.reservations.list"
+    "bigquery.reservations.list",
+    "resourcemanager.projects.get"
   ]
 
   # Sink filter to get only the logs related to bigquery
-  sink_filter = "(resource.type=\"bigquery_resource\" AND (protoPayload.methodName=\"jobservice.insert\" OR protoPayload.methodName=\"jobservice.jobcompleted\")) OR resource.type=\"bigquery_dts_config\""
-
+  sink_filter = "(resource.type=\"bigquery_resource\" AND ((protoPayload.methodName=\"jobservice.insert\" AND  protoPayload.serviceData.jobInsertResponse.resource.jobName.jobId :*) OR (protoPayload.methodName=\"jobservice.jobcompleted\" AND protoPayload.serviceData.jobCompletedEvent.job.jobName.jobId :*))) OR (resource.type=\"bigquery_dts_config\" AND (labels.run_id :* AND resource.labels.config_id :*))"
   # Note: For permissions make sure to enable necessary api's as we add new permissions
 }
-
 
 resource "random_integer" "unique_id" {
   max = 5000
   min = 1
 }
+
+
 
 # Create topics for Unravel Bigquery with Push/Pull subscription
 module "unravel_topics" {
@@ -82,7 +86,7 @@ module "unravel_topics" {
   pull_model            = var.pull_model
 
   depends_on = [
-  data.google_project.project]
+  data.google_project.project, module.google_enable_api]
 
 }
 
@@ -91,51 +95,25 @@ module "unravel_iam" {
 
   source = "./modules/iam"
 
-  project_ids                   = local.project_ids_map
-  role_permission               = local.role_permission
-  admin_project_ids             = local.admin_project_ids_map
-  admin_project_role_permission = local.admin_project_role_permission
-  unravel_role                  = "${var.unravel_role}_${random_integer.unique_id.id}"
-  admin_unravel_role            = "${var.admin_unravel_role}_${random_integer.unique_id.id}"
-  unravel_service_account       = "${var.unravel_service_account}-${random_integer.unique_id.id}"
-  unravel_project_id            = var.unravel_project_id
-  key_based_auth_model          = var.key_based_auth_model
-  multi_key_auth_model          = var.multi_key_auth_model
+  project_ids                         = local.project_ids_map
+  role_permission                     = local.role_permission
+  admin_project_ids                   = local.admin_project_ids_map
+  admin_project_role_permission       = local.admin_project_role_permission
+  unravel_role                        = "${var.unravel_role}_${random_integer.unique_id.id}"
+  admin_unravel_role                  = "${var.admin_unravel_role}_${random_integer.unique_id.id}"
+  unravel_service_account             = "${var.unravel_service_account}-${random_integer.unique_id.id}"
+  unravel_project_id                  = var.unravel_project_id
+  key_based_auth_model                = var.key_based_auth_model
+  multi_key_auth_model                = var.multi_key_auth_model
+  unravel_keys_location               = var.unravel_keys_location
+  admin_only_project_ids_map          = local.admin_only_project_ids_map
+  admin_and_monitoring_project_id_map = local.admin_and_monitoring_project_id_map
 
   depends_on = [
-  data.google_project.project]
+  data.google_project.project, module.google_enable_api]
 
 }
 
-# Write decoded Service account private keys to filesystem
-resource "local_file" "unravel_keys" {
-
-  count = var.key_based_auth_model ? 1 : 0
-
-  content  = base64decode(module.unravel_iam.keys[0].private_key)
-  filename = "${var.unravel_keys_location}/${var.unravel_project_id}.json"
-
-}
-
-# Write decoded Service account private keys to filesystem
-resource "local_file" "unravel_project_keys" {
-
-  for_each = var.multi_key_auth_model ? local.project_ids_map : {}
-
-  content  = base64decode(module.unravel_iam.project_keys[each.value].private_key)
-  filename = "${var.unravel_keys_location}/${each.value}.json"
-
-}
-
-# Write decoded Service account private keys to filesystem
-resource "local_file" "unravel_admin_keys" {
-
-  for_each = var.multi_key_auth_model ? local.admin_project_ids_map : {}
-
-  content  = base64decode(module.unravel_iam.admin_keys[each.value].private_key)
-  filename = "${var.unravel_keys_location}/${each.value}.json"
-
-}
 
 # Create a log router sink with Unravel Pubsub topic as destination
 module "unravel_sink" {
@@ -166,9 +144,20 @@ resource "google_pubsub_topic_iam_policy" "policy" {
 module "google_enable_api" {
   source = "./modules/apis"
 
-  project_all = var.multi_key_auth_model ? var.monitoring_project_ids : concat(var.monitoring_project_ids, [var.unravel_project_id])
-
+  project_all  = compact(concat(var.monitoring_project_ids, [var.unravel_project_id]))
   service_apis = local.apis
+
+  depends_on = [
+  data.google_project.project]
+
+}
+
+# Enable GCP service API
+module "google_enable_admin_api" {
+  source = "./modules/apis"
+
+  project_all  = var.admin_project_ids
+  service_apis = local.admin_apis
 
   depends_on = [
   data.google_project.project]
@@ -191,8 +180,8 @@ data "google_iam_policy" "pubsub_access" {
 
 # Enable google pupsub apis if not already enabled.
 resource "google_project_service" "cloud_pubsub_api_unravel" {
-  count = var.multi_key_auth_model ? 0 : 1
 
+  count   = var.multi_key_auth_model ? 0 : 1
   project = var.unravel_project_id
   service = "pubsub.googleapis.com"
 

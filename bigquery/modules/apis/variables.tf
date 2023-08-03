@@ -5,7 +5,7 @@ variable "project_all" {
 }
 
 variable "service_apis" {
-  description = "Name of the api that has too be enabled"
+  description = "Name of the api that has to be enabled"
   type        = list(string)
   default     = []
 }

@@ -16,16 +16,6 @@ variable "monitoring_project_ids" {
   }
 }
 
-variable "unravel_project_id" {
-  description = "ID of the GCP Project where Unravel VM  is running"
-  type        = string
-
-  validation {
-    condition     = can(regex("[a-zA-Z0-9-]+$", var.unravel_project_id))
-    error_message = "Accepts only a valid project name. Please provide a valid project name."
-  }
-}
-
 variable "admin_project_ids" {
   description = "GCP Admin Project IDs where reservations/collections are configured"
   type        = list(string)
@@ -47,7 +37,27 @@ variable "admin_project_ids" {
 
 }
 
+variable "unravel_project_id" {
+  description = "ID of the GCP Project where Unravel VM  is running"
+  type        = string
+
+  default = null
+}
+
 # **Optional Variables/Variables with Default Values**
+
+variable "unravel_push_endpoint" {
+  description = "Publicly accessible HTTPS Unravel LR endpoint"
+  type        = string
+
+  validation {
+    condition     = can(regex("https://[a-z0-9-._A-Z]+(:[0-9]{2,})?$", var.unravel_push_endpoint))
+    error_message = "Unravel Push endpoint should be a valid publicly accessible HTTPS endpoint without a trailing '/'. Ex: 'https://bigquery.unraveldata.com'."
+  }
+
+  default = "https://devnull.unraveldata.unravel"
+
+}
 
 variable "unravel_keys_location" {
   description = "Local FS path to save GCP service account Keys"
@@ -86,7 +96,6 @@ variable "unravel_pubsub_topic" {
     error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-), periods (.), underscores (_), tildes (~), percents (%) or plus signs (+). Cannot start with goog."
   }
 }
-
 
 variable "unravel_role" {
   description = "Custom role name for Unravel"
@@ -137,31 +146,16 @@ variable "unravel_service_account" {
 
 }
 
-
 variable "x_svc_acc_permissions" {
   description = "List of extended service account permissions required for Unravel VM"
   type        = list(string)
   default     = ["logging.logEntries.create"]
 }
 
-variable "pull_model" {
-  description = "Enables Pull model for PubSub topic"
+variable "key_based_auth_model" {
+  description = "Enable or disable the key-based authentication model"
   type        = bool
-
-  default = true
-}
-
-variable "unravel_push_endpoint" {
-  description = "Publicly accessible HTTPS Unravel LR endpoint"
-  type        = string
-
-  validation {
-    condition     = can(regex("https://[a-z0-9-._A-Z]+(:[0-9]{2,})?$", var.unravel_push_endpoint))
-    error_message = "Unravel Push endpoint should be a valid publicly accessible HTTPS endpoint without a trailing '/'. Ex: 'https://bigquery.unraveldata.com'."
-  }
-
-  default = "https://devnull.unraveldata.unravel"
-
+  default     = false
 }
 
 variable "multi_key_auth_model" {
@@ -171,8 +165,9 @@ variable "multi_key_auth_model" {
   default = false
 }
 
-variable "key_based_auth_model" {
-  description = "Enable or disable the key-based authentication model"
+variable "pull_model" {
+  description = "Enables Pull model for PubSub topic"
   type        = bool
-  default     = false
+
+  default = true
 }

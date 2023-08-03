@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket  = "unravel-tf-state"
+    bucket  = "tf-state-unravel"
     prefix  = "unravel-terraform/state"
   }
 }

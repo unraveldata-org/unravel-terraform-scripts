@@ -19,7 +19,7 @@ To download and install Terraform, follow these steps:
 Visit https://www.terraform.io/downloads to access the Terraform downloads page and the instructions to install terraform.
 
 ### Configure gcloud
-Before using this project, you need to authenticate with Google Cloud using gcloud. Follow the instructions provided at https://cloud.google.com/sdk/docs/install-sdk for a one-time configuration. You can find the install instruction nased on the Machine Arch and OS installed in the baove link.
+Before using this project, you need to authenticate with Google Cloud using gcloud. Follow the instructions provided at https://cloud.google.com/sdk/docs/install-sdk for a one-time configuration. You can find the installation instruction based on the Machine Arch and OS installed in the above link.
 
 ### Initialize gcloud
 To authenticate gcloud, execute the following commands:
@@ -29,9 +29,9 @@ gcloud init
 gcloud auth application-default login
 ```
 ## Configuration and Installation
-Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These project can be classified in to 3 based on the charecterestics.
+Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These project can be classified in to 3 based on the characteristics.
 
-1. Monitoring projects: Projects where Biquery jobs are running and needs to be integrated with Unravel. Mostly all the projects will come uder this.
+1. Monitoring projects: Projects where Bigquery jobs are running and needs to be integrated with Unravel. Mostly all the projects will come under this.
 2. Admin Project: Project(s) where Bigquery Slot reservations/Commitments are defined. This Project may or may not be running Bigquery jobs.
 3. Unravel Projects: The Project where Unravel VM is installed. It may or may not be running Bigquery jobs. 
 
@@ -42,7 +42,7 @@ Unravel supports three different authentication models for querying BigQuery API
 3. Multiple Key based authentication.
 
 ### VM Identity based authentication.
-In this authentication model, A "Master service account" will be created under the "Unravel Project" and IAM roles will be created in each "Monitoring projects", "Admin Projects" and "Unravel Projects". Finally, these roles will be binded to the "Master Service account" created under the "Unravel Project".
+In this authentication model, A "Master service account" will be created under the "Unravel Project" and IAM roles will be created in each "Monitoring projects", "Admin Projects" and "Unravel Projects". Finally, these roles will be bound to the "Master Service account" created under the "Unravel Project".
 
 The next step involves assigning the "Master Service account" to the Unravel VM. After Terraform creates the required resources, you must perform a one-time manual task: Stop the Unravel VM, change the Service account to the "Master Service account," and then restart the VM and Unravel.
 
@@ -97,13 +97,13 @@ Following variables should be updated.
 **multi_key_auth_model** (Required)(bool) : Set this variable as `true`
 
 
-## Configuring Terraform Backend.
-It is always recommended to keep the state file in a central storage. Pleease configure `backend.tf` file in the repo to use Google Storage as your Terraform statefile storage.
+## Configuring Terraform Backend.(Optional)
+It is always recommended to keep the state file in a central storage. Please configure `backend.tf` file in the repo to use Google Storage as your Terraform state file storage.
 
 ```bash
 cp backend.tf.example backend.tf
 ```
-Update the file with an already existing Google Storage Path where the user executing the terrafrom have access to.
+Update the file with an already existing Google Storage Path where the user executing the terraform have access to.
 
 ## Run Terraform to Create Resources
 Run Terraform commands in the terraform directory:

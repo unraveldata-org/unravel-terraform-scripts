@@ -1,4 +1,5 @@
 locals {
+  # A map of Project id and APIs
   config_apis = distinct(flatten([
     for each_project in var.project_all : [
       for apis in var.service_apis : {

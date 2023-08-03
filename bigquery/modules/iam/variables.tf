@@ -47,6 +47,20 @@ variable "key_based_auth_model" {
 }
 
 variable "multi_key_auth_model" {
-  description = "Terraform will create service account and keys in each GCP projects"
+  type = bool
 }
 
+variable "unravel_keys_location" {
+  type    = string
+  default = "./keys"
+}
+
+variable "admin_only_project_ids_map" {
+  type    = map(string)
+  default = {}
+
+}
+variable "admin_and_monitoring_project_id_map" {
+  type    = map(string)
+  default = {}
+}

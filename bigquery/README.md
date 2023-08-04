@@ -12,6 +12,43 @@ git
 curl
 vim
 ```
+The GCP user running this terrafrom script should have the following permissions.
+
+```bash
+iam.roles.create
+iam.roles.delete
+iam.roles.get
+iam.roles.list
+iam.roles.undelete
+iam.roles.update
+iam.serviceAccountKeys.create
+iam.serviceAccountKeys.delete
+iam.serviceAccountKeys.get
+iam.serviceAccounts.create
+iam.serviceAccounts.delete
+iam.serviceAccounts.get
+iam.serviceAccounts.getIamPolicy
+iam.serviceAccounts.setIamPolicy
+logging.sinks.create
+logging.sinks.delete
+logging.sinks.get
+pubsub.subscriptions.create
+pubsub.subscriptions.delete
+pubsub.subscriptions.get
+pubsub.subscriptions.update
+pubsub.topics.attachSubscription
+pubsub.topics.create
+pubsub.topics.delete
+pubsub.topics.get
+pubsub.topics.getIamPolicy
+pubsub.topics.setIamPolicy
+resourcemanager.projects.get
+resourcemanager.projects.getIamPolicy
+resourcemanager.projects.setIamPolicy
+serviceusage.services.disable
+serviceusage.services.enable
+serviceusage.services.list
+``
 
 ### Download Terraform
 To download and install Terraform, follow these steps:

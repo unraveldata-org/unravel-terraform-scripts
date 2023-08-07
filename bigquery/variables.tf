@@ -1,18 +1,28 @@
 variable "monitoring_project_ids" {
   description = "GCP Project IDs for configuring Unravel Bigquery. Only those queries running in these projects will be monitored"
-  type        = list(string)
+  type        = map(string)
+
+  default = {}
 
   validation {
     condition = length([
-      for project in var.monitoring_project_ids : true
+      for project in keys(var.monitoring_project_ids) : true
       if can(regex("[a-z0-9-]+$", project))
-    ]) == length(var.monitoring_project_ids)
+    ]) == length(keys(var.monitoring_project_ids))
     error_message = "Accepts only GCP project ID and not Project Name. Please provide a valid GCP project ID. Ex: 'tactical-factor-123456'."
   }
 
   validation {
-    condition     = length(var.monitoring_project_ids) == length(distinct(var.monitoring_project_ids))
+    condition     = length(keys(var.monitoring_project_ids)) == length(distinct(keys(var.monitoring_project_ids)))
     error_message = "All project ids must be unique."
+  }
+
+  validation {
+    condition = length([
+      for project in values(var.monitoring_project_ids) : true
+      if can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", project))
+    ]) == length(values(var.monitoring_project_ids))
+    error_message = "Subscription ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-), periods (.), underscores (_), tildes (~), percents (%) or plus signs (+). Cannot start with goog."
   }
 }
 
@@ -68,19 +78,6 @@ variable "unravel_keys_location" {
   validation {
     condition     = can(regex("[a-z0-9-._/A-Z]+[A-Za-z0-9]$", var.unravel_keys_location))
     error_message = "A valid filesystem path where unravel user have access to without a trailing '/'. Ex: './keys' ."
-  }
-}
-
-variable "unravel_subscription" {
-
-  description = "Unravel Pub/Sub topic subscription ID"
-  type        = string
-
-  default = "unravel-bigquery-sub"
-
-  validation {
-    condition     = can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", var.unravel_subscription))
-    error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-), periods (.), underscores (_), tildes (~), percents (%) or plus signs (+). Cannot start with goog."
   }
 }
 

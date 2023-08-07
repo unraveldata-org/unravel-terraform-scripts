@@ -14,16 +14,18 @@ data "google_project" "project" {
 
 # Variables which are constant. Changing these values will result in broken data
 locals {
+  monitoring_projects   = keys(var.monitoring_project_ids)
+
   apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com", "bigqueryreservation.googleapis.com", "bigquerydatatransfer.googleapis.com"]
   admin_apis            = ["cloudresourcemanager.googleapis.com"]
-  project_ids_map       = { for project in toset(var.monitoring_project_ids) : project => project }
+  project_ids_map       = { for project in toset(local.monitoring_projects) : project => project }
   admin_project_ids_map = { for admin_project in toset(var.admin_project_ids) : admin_project => admin_project }
 
-  admin_only_project_ids_map          = { for admin_project in setsubtract(var.admin_project_ids, var.monitoring_project_ids) : admin_project => admin_project }
-  admin_and_monitoring_project_id_map = { for admin_project in setintersection(var.admin_project_ids, var.monitoring_project_ids) : admin_project => admin_project }
+  admin_only_project_ids_map          = { for admin_project in setsubtract(var.admin_project_ids, local.monitoring_projects) : admin_project => admin_project }
+  admin_and_monitoring_project_id_map = { for admin_project in setintersection(var.admin_project_ids, local.monitoring_projects) : admin_project => admin_project }
 
   config_apis = distinct(flatten([
-    for each_project in var.monitoring_project_ids : [
+    for each_project in local.monitoring_projects : [
       for apis in local.apis : {
         project_id = each_project
         api_name   = apis
@@ -78,9 +80,8 @@ module "unravel_topics" {
 
   source = "./modules/pubsub"
 
-  project_ids           = local.project_ids_map
+  project_ids           = var.monitoring_project_ids
   unravel_push_endpoint = var.unravel_push_endpoint
-  unravel_subscription  = var.unravel_subscription
   unravel_pubsub_topic  = "${var.unravel_pubsub_topic}-${random_integer.unique_id.id}"
   pull_model            = var.pull_model
 
@@ -143,7 +144,7 @@ resource "google_pubsub_topic_iam_policy" "policy" {
 module "google_enable_api" {
   source = "./modules/apis"
 
-  project_all  = compact(concat(var.monitoring_project_ids, [var.unravel_project_id]))
+  project_all  = compact(concat(local.monitoring_projects, [var.unravel_project_id]))
   service_apis = local.apis
 
   depends_on = [

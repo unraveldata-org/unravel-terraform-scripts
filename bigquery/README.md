@@ -48,7 +48,8 @@ resourcemanager.projects.setIamPolicy
 serviceusage.services.disable
 serviceusage.services.enable
 serviceusage.services.list
-``
+```
+
 
 ### Download Terraform
 To download and install Terraform, follow these steps:
@@ -105,7 +106,7 @@ Following variables should be updated.
 
 **unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
 
-**monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+**monitoring_project_ids** (Required)(map): Here, you must provide a map of GCP Project IDs(key) and the corresponding PubSub subscription name(values) to be created in these projects. These projects are where the BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list. 
 
 **admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
@@ -121,7 +122,7 @@ Following variables should be updated.
 
 **unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
 
-**monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+**monitoring_project_ids** (Required)(map): Here, you must provide a map of GCP Project IDs(key) and the corresponding PubSub subscription name(values) to be created in these projects. These projects are where the BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list. 
 
 **admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 
@@ -130,7 +131,7 @@ Following variables should be updated.
 ### Creating resources for Multi Key based authentication.
 Following variables should be updated.
 
-**monitoring_project_ids** (Required)(list): Here, you must provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list.
+**monitoring_project_ids** (Required)(map): Here, you must provide a map of GCP Project IDs(key) and the corresponding PubSub subscription name(values) to be created in these projects. These projects are where the BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list. 
 
 **admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
 

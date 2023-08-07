@@ -24,7 +24,7 @@ admin_project_ids = ["gcp-admin-project-1"]
 # 1. Single Key based
 #       key_based_auth_model = true
 #       multi_key_auth_model = false
-3
+#
 # 2. VM Identity based  [default]
 #       key_based_auth_model = false
 #       multi_key_auth_model = false

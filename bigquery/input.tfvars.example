@@ -4,8 +4,14 @@
 #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 
-# [Required] GCP Project IDs to configure Unravel.
-monitoring_project_ids = ["unravel-gcp-project-1", "unravel-gcp-project-2"]
+# [Required] GCP Project IDs to configure Unravel Monitoring and the corresponding PubSub subscription ID.
+# Please note to use the same name while running `manager config bigquery add <project> <unravel_subscription>`
+# Default value is "unravel-bigquery-sub"
+monitoring_project_ids = {
+    "unravel-gcp-project-1" : "unravel-bigquery-sub",
+    "unravel-gcp-project-2" : "unravel-bigquery-sub",
+    "unravel-gcp-project-2" : "unravel-bigquery"
+    }
 
 # [Required] GCP Project ID where the Unravel is running. 
 # Only required for VM and Single Auth model. Please remove for Multi auth model
@@ -13,10 +19,6 @@ unravel_project_id = "unravel-project-id"
 
 # [Optional] GCP admin project ID if using Collections and Reservations
 admin_project_ids = ["gcp-admin-project-1"]
-
-# [Optional] Push subscription ID. Default value is "unravel-bigquery-sub".
-# Please note to use the same name while running manager config bigquery add <project> <unravel_subscription>
-unravel_subscription = "unravel-bigquery-sub"
 
 # [Required] Authentication mode of unravel, 
 # 1. Single Key based

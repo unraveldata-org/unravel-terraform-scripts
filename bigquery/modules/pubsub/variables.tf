@@ -8,11 +8,6 @@ variable "unravel_push_endpoint" {
   default     = ""
 }
 
-variable "unravel_subscription" {
-  description = "Unravel push subscription as provided in the intput.tfvars file"
-  default     = ""
-}
-
 variable "unravel_pubsub_topic" {
   description = "Unravel Pub/Sub topic name as provided in the intput.tfvars file"
   default     = ""

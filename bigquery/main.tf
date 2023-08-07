@@ -15,6 +15,7 @@ data "google_project" "project" {
 # Variables which are constant. Changing these values will result in broken data
 locals {
   monitoring_projects   = keys(var.monitoring_project_ids)
+
   apis                  = ["recommender.googleapis.com", "serviceusage.googleapis.com", "logging.googleapis.com", "cloudresourcemanager.googleapis.com", "bigqueryreservation.googleapis.com", "bigquerydatatransfer.googleapis.com"]
   admin_apis            = ["cloudresourcemanager.googleapis.com"]
   project_ids_map       = { for project in toset(local.monitoring_projects) : project => project }

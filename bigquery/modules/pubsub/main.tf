@@ -24,7 +24,7 @@ resource "google_pubsub_subscription" "unravel_subscription" {
   dynamic "push_config" {
     for_each = var.pull_model ? [] : [each.key]
     content {
-      push_endpoint = "${var.unravel_push_endpoint}/logs/bigquery/${var.project_ids[each.key]}/${var.project_ids[each.key]}/bigquery"
+      push_endpoint = "${var.unravel_push_endpoint}/logs/bigquery/${each.key}/bigquery/bigquery"
 
       attributes = {
         x-goog-version = "v1"

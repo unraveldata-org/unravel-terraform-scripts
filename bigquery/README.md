@@ -180,6 +180,11 @@ To establish VM identity-based authentication with Unravel, the subsequent comma
 ```bash
 <Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin
 ```
+5. Apply configuration changes and restart Unravel.
+```bash
+<Unravel_installation_path>/manager config apply --restart 
+```
+
 
 ### Configuring for Single Key based authentication with Unravel
 To establish Single key based authentication with Unravel, the subsequent commands has to be executed.
@@ -199,6 +204,10 @@ To establish Single key based authentication with Unravel, the subsequent comman
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
 <Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
+```
+5. Apply configuration changes and restart Unravel.
+```bash
+<Unravel_installation_path>/manager config apply --restart 
 ```
 
 The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory.
@@ -223,6 +232,10 @@ To establish Multi key based authentication with Unravel, the subsequent command
 ```bash
 <Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
 ```
+5. Apply configuration changes and restart Unravel.
+```bash
+<Unravel_installation_path>/manager config apply --restart 
+```
 
 The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory. 
 As Multi Key-based authentication generates a unique key for each added project, please utilize the respective key file named after 
@@ -236,12 +249,31 @@ terraform output
 ```
 
 ## Destroy the Resources Created by Terraform
+It is possible to eliminate resources either entirely or partially.
+
+### Removing from Unravel
+To remove projects from Unravel, use the remove command.
+
+```bash
+<Unravel_installation_path>l/manager config bigquery remove <project_id>
+<Unravel_installation_path>l/manager config apply --restart
+```
+
+### Removing Unravel Resources from Monitored projects
+Modify the input.tfvars file accordingly to exclude the designated project(s), then proceed to rerun  Terraform.  
+
+```bash
+terraform apply --var-file=input.tfvars
+```
+
+### Remove ALL resources [ CAUTION ]
 To remove all changes made through Terraform, execute the following command:
 
 ```bash
 cd terraform
 terraform destroy --var-file=input.tfvars
 ```
+
 
 ## Documentation
 All documentation for Unravel can be found on our webpage:

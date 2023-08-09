@@ -247,6 +247,30 @@ To view a list of resources created by Terraform, execute the following command:
 ```bash
 terraform output
 ```
+**VM Identity-Based Authentication**
+In this authentication mode, the authentication process relies on the Service Account. A service account will be created and is available through the Terraform output. To retrieve the service account name, you can use the following command:
+```
+terraform output unravel-service-account
+```
+To implement this, follow these steps:
+- Access the Terraform output to identify the generated service account.
+- Halt the VM.
+- Attach the generated service account to the VM.
+- Restart the VM to establish authenticated access.
+
+**Single Key-Based Authentication**
+In this authentication method, a single authentication key will be generated and stored within the designated 'keys' directory, which is the default path. This key can be used to authorize access across various projects.
+To retrieve the key path, you can execute the following command:
+```
+terraform output unravel_keys_location
+```
+**Multi Key-Based Authentication**
+In this authentication mode, a collection of keys will be generated within the 'keys' directory, which is the default path. Each key's name will correspond to the project it grants access to.
+To retrieve the key path, execute the following command:
+```
+terraform output unravel_keys_location
+```
+
 
 ## Destroy the Resources Created by Terraform
 It is possible to eliminate resources either entirely or partially.

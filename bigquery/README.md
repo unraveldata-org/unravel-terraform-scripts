@@ -191,19 +191,19 @@ To establish Single key based authentication with Unravel, the subsequent comman
 
 1. Set the authentication mode for the system and furnish the Unravel project ID
 ```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode single <unravel_project_id>
+<Unravel_installation_path>/manager config bigquery set-auth-mode single --project <unravel_project_id> --no-integration --credentials-file <path_to_credentials_file>
 ```
 2.  Integrate Monitoring projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> --subscription-id <unravel_subscription_name> 
  ```
 3. Incorporate Admin projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
+<Unravel_installation_path>l/manager config bigquery add <project_id> --subscription-id <unravel_subscription_name> --is-admin
 ```
 5. Apply configuration changes and restart Unravel.
 ```bash

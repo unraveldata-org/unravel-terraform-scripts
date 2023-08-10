@@ -178,7 +178,7 @@ To establish VM identity-based authentication with Unravel, the subsequent comma
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin
 ```
 5. Apply configuration changes and restart Unravel.
 ```bash
@@ -191,19 +191,19 @@ To establish Single key based authentication with Unravel, the subsequent comman
 
 1. Set the authentication mode for the system and furnish the Unravel project ID
 ```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode single <unravel_project_id>
+<Unravel_installation_path>/manager config bigquery set-auth-mode single <unravel_project_id> --credentials-file <path_to_credentials_file>
 ```
 2.  Integrate Monitoring projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> 
  ```
 3. Incorporate Admin projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring 
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin 
 ```
 5. Apply configuration changes and restart Unravel.
 ```bash
@@ -222,15 +222,15 @@ To establish Multi key based authentication with Unravel, the subsequent command
 ````
 2. Integrate Monitoring projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials-file <path_to_credentials_file>
  ```
 3. Incorporate Admin projects into Unravel.
 ```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials-file <path_to_credentials_file>
 ```
 4. Add an Admin project that also serves as a Monitoring project.
 ```bash
-<Unravel_installation_path>l/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials-file <path_to_credentials_file>
 ```
 5. Apply configuration changes and restart Unravel.
 ```bash
@@ -247,7 +247,7 @@ To view a list of resources created by Terraform, execute the following command:
 ```bash
 terraform output
 ```
-**VM Identity-Based Authentication**
+**VM Identity-Based Authentication**:
 In this authentication mode, the authentication process relies on the Service Account. A service account will be created and is available through the Terraform output. To retrieve the service account name, you can use the following command:
 ```
 terraform output unravel-service-account
@@ -258,7 +258,7 @@ To implement this, follow these steps:
 - Attach the generated service account to the VM.
 - Restart the VM to establish authenticated access.
 
-**Single Key-Based Authentication**
+**Single Key-Based Authentication** :
 In this authentication method, a single authentication key will be generated and stored within the designated 'keys' directory, which is the default path. This key can be used to authorize access across various projects.
 To retrieve the key path, you can execute the following command:
 ```
@@ -279,8 +279,8 @@ It is possible to eliminate resources either entirely or partially.
 To remove projects from Unravel, use the remove command.
 
 ```bash
-<Unravel_installation_path>l/manager config bigquery remove <project_id>
-<Unravel_installation_path>l/manager config apply --restart
+<Unravel_installation_path>/manager config bigquery remove <project_id>
+<Unravel_installation_path>/manager config apply --restart
 ```
 
 ### Removing Unravel Resources from Monitored projects
@@ -294,7 +294,7 @@ terraform apply --var-file=input.tfvars
 To remove all changes made through Terraform, execute the following command:
 
 ```bash
-cd terraform
+cd bigquery
 terraform destroy --var-file=input.tfvars
 ```
 

@@ -1,0 +1,22 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+#
+# Parameters for Unravel Observability tool configuration in GCP
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# [Required] GCP Project IDs to configure Unravel Monitoring and the corresponding PubSub subscription ID.
+# Please note to use the same name while running `manager config bigquery add <project> <unravel_subscription>`
+# Default value is "unravel-bigquery-sub"
+monitoring_project_ids = {
+    "unravel-gcp-project-1" : "unravel-bigquery-sub",
+    "unravel-gcp-project-2" : "unravel-bigquery-sub",
+    "unravel-gcp-project-3" : "unravel-bigquery"
+    }
+
+# [Required] GCP Project ID where the Unravel is running. 
+# Only required for VM and Single Auth model. Please remove for Multi auth model
+unravel_service_account = "unravel-project-id"
+
+# [Optional] GCP admin project ID if using Collections and Reservations
+admin_project_ids = ["gcp-admin-project-1"]
+

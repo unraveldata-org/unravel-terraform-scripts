@@ -1,312 +1,123 @@
 ![Unravel](https://www.unraveldata.com/wp-content/themes/unravel-child/src/images/unLogo.svg)  
 # GCP Resource Creation and Configuration for Unravel Bigquery Integration
-![Terraform Workflow](https://github.com/unraveldata-org/unravel-terraform-scripts/actions/workflows/run-prcheck.yml/badge.svg)
+![BigQuery](https://cdn.holistics.io/landing/databases/bigquery.png)
 
 Project for managing Unravel Bigquery GCP resource configuration! This project aims to simplify the process of setting up and managing Google Cloud resources using Terraform. Below are the instructions to get started:
 
-## Prerequisites
-Before proceeding with the installation, ensure that you have the following packages installed on your system:
-
+## Before You Begin
+Before you start, make sure you have the following software installed on your computer:
 ```bash
 git
 curl
 vim
 ```
-The GCP user running this terrafrom script should have the following permissions.
 
-```bash
-iam.roles.create
-iam.roles.delete
-iam.roles.get
-iam.roles.list
-iam.roles.undelete
-iam.roles.update
-iam.serviceAccountKeys.create
-iam.serviceAccountKeys.delete
-iam.serviceAccountKeys.get
-iam.serviceAccounts.create
-iam.serviceAccounts.delete
-iam.serviceAccounts.get
-iam.serviceAccounts.getIamPolicy
-iam.serviceAccounts.setIamPolicy
-logging.sinks.create
-logging.sinks.delete
-logging.sinks.get
-pubsub.subscriptions.create
-pubsub.subscriptions.delete
-pubsub.subscriptions.get
-pubsub.subscriptions.update
-pubsub.topics.attachSubscription
-pubsub.topics.create
-pubsub.topics.delete
-pubsub.topics.get
-pubsub.topics.getIamPolicy
-pubsub.topics.setIamPolicy
-resourcemanager.projects.get
-resourcemanager.projects.getIamPolicy
-resourcemanager.projects.setIamPolicy
-serviceusage.services.disable
-serviceusage.services.enable
-serviceusage.services.list
-```
+### Step 1: Download Terraform
+Terraform is a tool we'll use for this integration. Follow these simple steps:
 
+1. Visit Terraform's download page.
+2. Follow the instructions provided on that page to download and install Terraform.
+ 
+### Step 2: Configure Google Cloud
+To connect to Google Cloud, you'll need to set up Google Cloud SDK (gcloud). Follow these steps:
 
-### Download Terraform
-To download and install Terraform, follow these steps:
+1. Visit Google Cloud SDK installation guide.
+2. Follow the instructions based on your machine's architecture and operating system.
 
-Visit https://www.terraform.io/downloads to access the Terraform downloads page and the instructions to install terraform.
-
-### Configure gcloud
-Before using this project, you need to authenticate with Google Cloud using gcloud. Follow the instructions provided at https://cloud.google.com/sdk/docs/install-sdk for a one-time configuration. You can find the installation instruction based on the Machine Arch and OS installed in the above link.
-
-### Initialize gcloud
-To authenticate gcloud, execute the following commands:
+### Step 3: Initialize Google Cloud
+To connect to Google Cloud, run these commands in your terminal:
 
 ```bash
 gcloud init
 gcloud auth application-default login
 ```
-## Configuration and Installation
-Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These project can be classified in to 3 based on the characteristics.
 
-1. Monitoring projects: Projects where Bigquery jobs are running and needs to be integrated with Unravel. Mostly all the projects will come under this.
-2. Admin Project: Project(s) where Bigquery Slot reservations/Commitments are defined. This Project may or may not be running Bigquery jobs.
-3. Unravel Projects: The Project where Unravel VM is installed. It may or may not be running Bigquery jobs. 
+## Setting Up Unravel BigQuery Integration
+Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These project can be classified in to 2 based on the charecterestics.
 
-Unravel supports three different authentication models for querying BigQuery API/logs:
+1. Monitoring Project(s): These are where BigQuery jobs run and need to be integrated with Unravel. Most of your projects likely fall into this category.
 
-1. VM Identity based authentication.
-2. Single Key based authentication.
-3. Multiple Key based authentication.
+2. Admin Project: These are projects where BigQuery Slot reservations/Commitments are defined. These projects may or may not run BigQuery jobs.
 
-### VM Identity based authentication.
-In this authentication model, A "Master service account" will be created under the "Unravel Project" and IAM roles will be created in each "Monitoring projects", "Admin Projects" and "Unravel Projects". Finally, these roles will be bound to the "Master Service account" created under the "Unravel Project".
+Unravel VM Identity-based authentication  for querying BigQuery API/logs. During onboarding, Unravel will provide you with a service account.
 
-The next step involves assigning the "Master Service account" to the Unravel VM. After Terraform creates the required resources, you must perform a one-time manual task: Stop the Unravel VM, change the Service account to the "Master Service account," and then restart the VM and Unravel.
+### Step 4: VM Identity-Based Authentication
+We've automated the resource creation and configuration for you. Here's what you need to do:
 
-### Single Key based authentication.
-Similar to the VM Identity-based authentication model, a "Master service account" is created under the "Unravel Project," and IAM roles are set up in each "Monitoring Project," "Admin Project," and "Unravel Project." These roles are associated with the "Master Service account" in the "Unravel Project."
+1. Unravel will provide you with a "Service Account" during onboarding.
+2. Terrafrom script in this repo will create IAM roles in your "Monitoring Projects" and "Admin Projects" in your GCP projects.
+3. These roles will be linked to the "Service Account" provided by Unravel.
 
-However, in this model, instead of assigning the "Master service account" to the VM, we generate a key for the "Master Service account." This key will be used by Unravel to gain access.
+## Customizing Your Configuration
+To tailor the integration to your specific needs, you'll create a Terraform input file. Here's how:
 
-### Multiple Key based authentication.
-In the Multikey based authentication model, an IAM role and a service account will be created in each project (Monitoring, Admin, and Unravel Projects). These roles and service accounts will be associated with one another, and a key will be generated for each project.
-
-Choose the authentication model that best fits your requirements, 
-
-## Create Terraform Input File
-Begin by duplicating the provided example input file, input.tfvars.example, and renaming it as input.tfvars. This will serve as your working copy, where you'll input your specific project details.
+### Step 5: Create a Terraform Input File
+Start by duplicating the example input file named input.tfvars.example. Rename it to input.tfvars.
 
 ```bash
 cp input.tfvars.example input.tfvars
 ```
 
-### Creating resources for VM Identity based authentication.
-Following variables should be updated.
+### Step 6: Customize for VM Identity-Based Authentication
+Now, open the input.tfvars file and make these updates:
 
-**unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
+unravel_service_account (Required, string): Update this with the Service Account provided by Unravel during onboarding. Make sure it's accurate for a successful integration.
 
-**monitoring_project_ids** (Required)(map): Here, you must provide a map of GCP Project IDs(key) and the corresponding PubSub subscription name(values) to be created in these projects. These projects are where the BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list. 
+monitoring_project_ids (Required, map): Provide a list of GCP Project IDs where BigQuery Jobs are running and need monitoring. Include the corresponding subscription name to use for each project.
 
-**admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
+admin_project_ids (Optional, list): If you have Admin Projects where BigQuery slot reservations are configured, list their GCP Project IDs here. Otherwise, leave it empty.
 
-**key_based_auth_model** (Required)(bool) : Set this variable as `false` 
+## Storing Terraform State
+To keep things organized, we recommend configuring a central storage for your Terraform state file:
 
-**NB:** Once created, locate the service account name created by terraform using the following command and attach that service account to Unravel VM manually. This requires the VM to be shutdown and restarted.
-
-```bash
-terraform output unravel_service_account
-```
-### Creating resources for Single Key based authentication.
-Following variables should be updated.
-
-**unravel_project_id** (Required)(string): This variable should contain the GCP Project ID where the Unravel VM is installed. It is crucial to accurately specify this ID for successful integration with Unravel.
-
-**monitoring_project_ids** (Required)(map): Here, you must provide a map of GCP Project IDs(key) and the corresponding PubSub subscription name(values) to be created in these projects. These projects are where the BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list. 
-
-**admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
-
-**key_based_auth_model** (Required)(bool) : Set this variable as `true` 
-
-### Creating resources for Multi Key based authentication.
-Following variables should be updated.
-
-**monitoring_project_ids** (Required)(map): Here, you must provide a map of GCP Project IDs(key) and the corresponding PubSub subscription name(values) to be created in these projects. These projects are where the BigQuery Jobs are running and need monitoring. Ensure that all relevant projects are included in this list. 
-
-**admin_project_ids** (Optional)(list): If your setup involves Admin Projects where BigQuery slot reservations are configured, provide a list of their GCP Project IDs in this variable. Otherwise, leave it empty or omit it.
-
-**key_based_auth_model** (Required)(bool) : Set this variable as `false` 
-
-**multi_key_auth_model** (Required)(bool) : Set this variable as `true`
-
-
-## Configuring Terraform Backend.(Optional)
-It is always recommended to keep the state file in a central storage. Please configure `backend.tf` file in the repo to use Google Storage as your Terraform state file storage.
+### Step 7: Configure Terraform Backend
+Copy the example backend configuration file using this command:
 
 ```bash
 cp backend.tf.example backend.tf
 ```
-Update the file with an already existing Google Storage Path where the user executing the terraform have access to.
 
-## Run Terraform to Create Resources
-Run Terraform commands in the terraform directory:
-``` bash
-cd bigquery
+Update the backend.tf file with the Google Storage Path where the user running Terraform has access. 
+
+## Creating Your Resources
+With everything set up, it's time to create the necessary resources:
+
+### Step 8: Run Terraform
+Navigate to the terraform directory and run these commands:
+
+```bash
+cd saas/bigquery
 terraform init
 terraform plan --var-file=input.tfvars
 terraform apply --var-file=input.tfvars
 ```
-## Configuring GCP resources with Unravel
-After creating the resources, it has to be configured with Unravel.
 
-The process of configuring Google Cloud Platform (GCP) resources through Unravel is elucidated in the following sections.
-
-### Configuring for VM Identity based authentication with Unravel
-To establish VM identity-based authentication with Unravel, the subsequent commands has to be executed.
-
-1. Set the authentication mode for the system and furnish the Unravel project ID.
-```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode vm --project <unravel_project_id>
-```
-2. Integrate Monitoring projects into Unravel.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name>
- ```
-3. Incorporate Admin projects into Unravel.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring 
-```
-4. Add an Admin project that also serves as a Monitoring project.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin
-```
-5. Apply configuration changes and restart Unravel.
-```bash
-<Unravel_installation_path>/manager config apply --restart 
-```
-
-
-### Configuring for Single Key based authentication with Unravel
-To establish Single key based authentication with Unravel, the subsequent commands has to be executed.
-
-1. Set the authentication mode for the system and furnish the Unravel project ID
-```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode single --project <unravel_project_id> --credentials-file <path_to_credentials_file>
-```
-2.  Integrate Monitoring projects into Unravel.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> 
- ```
-3. Incorporate Admin projects into Unravel.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring 
-```
-4. Add an Admin project that also serves as a Monitoring project.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin 
-```
-5. Apply configuration changes and restart Unravel.
-```bash
-<Unravel_installation_path>/manager config apply --restart 
-```
-
-The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory.
-Since this authentication method employs a single key, one file can be utilized for all projects.
-
-### Configuring for Multi Key based authentication.
-To establish Multi key based authentication with Unravel, the subsequent commands has to be executed.
-
-1.  Set the authentication mode for the system and furnish the Unravel project ID
-```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode multi
-````
-2. Integrate Monitoring projects into Unravel.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --credentials-file <path_to_credentials_file>
- ```
-3. Incorporate Admin projects into Unravel.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> --is-admin --no-monitoring --credentials-file <path_to_credentials_file>
-```
-4. Add an Admin project that also serves as a Monitoring project.
-```bash
-<Unravel_installation_path>/manager config bigquery add <project_id> <unravel_subscription_name> --is-admin --credentials-file <path_to_credentials_file>
-```
-5. Apply configuration changes and restart Unravel.
-```bash
-<Unravel_installation_path>/manager config apply --restart 
-```
-
-The "path_to_credentials_file" will be accessible through the Terraform output and can also be located in the "./keys/" directory. 
-As Multi Key-based authentication generates a unique key for each added project, please utilize the respective key file named after 
-the project ID.
-
-## List the Resources Created by Terraform
-To view a list of resources created by Terraform, execute the following command:
+## Checking Your Resources
+To see a list of the resources created by Terraform, run this command:
 
 ```bash
 terraform output
 ```
-**VM Identity-Based Authentication**:
-In this authentication mode, the authentication process relies on the Service Account. A service account will be created and is available through the Terraform output. To retrieve the service account name, you can use the following command:
-```
-terraform output unravel-service-account
-```
-To implement this, follow these steps:
-- Access the Terraform output to identify the generated service account.
-- Halt the VM.
-- Attach the generated service account to the VM.
-- Restart the VM to establish authenticated access.
 
-**Single Key-Based Authentication** :
-In this authentication method, a single authentication key will be generated and stored within the designated 'keys' directory, which is the default path. This key can be used to authorize access across various projects.
-To retrieve the key path, you can execute the following command:
-```
-terraform output unravel_keys_location
-```
-**Multi Key-Based Authentication**
-In this authentication mode, a collection of keys will be generated within the 'keys' directory, which is the default path. Each key's name will correspond to the project it grants access to.
-To retrieve the key path, execute the following command:
-```
-terraform output unravel_keys_location
-```
+## Removing Resources
+To undo everything created by Terraform, run this command:
 
-
-## Destroy the Resources Created by Terraform
-It is possible to eliminate resources either entirely or partially.
-
-### Removing from Unravel
-To remove projects from Unravel, use the remove command.
+### Step 9: Destroy Resources
+Navigate to the terraform directory and execute:
 
 ```bash
-<Unravel_installation_path>/manager config bigquery remove <project_id>
-<Unravel_installation_path>/manager config apply --restart
-```
-
-### Removing Unravel Resources from Monitored projects
-Modify the input.tfvars file accordingly to exclude the designated project(s), then proceed to rerun  Terraform.  
-
-```bash
-terraform apply --var-file=input.tfvars
-```
-
-### Remove ALL resources [ CAUTION ]
-To remove all changes made through Terraform, execute the following command:
-
-```bash
-cd bigquery
+cd terraform
 terraform destroy --var-file=input.tfvars
 ```
 
+## Documentation and Support
+For detailed documentation, visit our webpage.
 
-## Documentation
-All documentation for Unravel can be found on our webpage:
-https://docs.unraveldata.com
+If you have any questions or encounter issues during the integration, reach out to our support team at support@unraveldata.com. We're here to help.
 
-## Support and Feedback
-If you encounter any issues or have questions during the integration process, don't hesitate to reach out to our support team at support@unraveldata.com. We are here to assist you and ensure a successful setup.
+We value your feedback! If you have suggestions or improvements for this guide or the repository, please open an issue or submit a pull request.
 
-We value your feedback! If you have any suggestions or improvements to contribute to this repository, please feel free to open an issue or submit a pull request.
+Thank you for choosing Unravel for your big data observability needs. We look forward to helping you optimize your big data applications and enhance your data platform's performance and efficiency. Happy Unraveling!
 
-Thank you for choosing Unravel for your big data observability needs. We are excited to help you optimize your big data applications and enhance your data platform's performance and efficiency. Happy Unraveling!
+
 

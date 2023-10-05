@@ -39,3 +39,4 @@ terraform.rc
 # Exclude files under ./keys/ directory
 keys/*.json
 
+*.swap

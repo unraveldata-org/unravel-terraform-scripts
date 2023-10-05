@@ -59,6 +59,7 @@ locals {
     "recommender.bigqueryCapacityCommitmentsRecommendations.list",
     "recommender.bigqueryPartitionClusterRecommendations.get",
     "recommender.bigqueryPartitionClusterRecommendations.list",
+    "resourcemanager.projects.get",
     "serviceusage.services.use"
   ], var.x_svc_acc_permissions)
 

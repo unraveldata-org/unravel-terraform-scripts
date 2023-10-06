@@ -15,13 +15,13 @@ vim
 ### Step 1: Download Terraform
 Terraform is a tool we'll use for this integration. Follow these simple steps:
 
-1. Visit Terraform's download page.
-2. Follow the instructions provided on that page to download and install Terraform.
+1. Visit [Terraform's download page](https://www.terraform.io/downloads).
+2. Follow the instructions provided on the [Terraform install page](https://developer.hashicorp.com/terraform/tutorials/gcp-get-started/install-cli) to complete installation.
  
 ### Step 2: Configure Google Cloud
 To connect to Google Cloud, you'll need to set up Google Cloud SDK (gcloud). Follow these steps:
 
-1. Visit Google Cloud SDK installation guide.
+1. Visit [Google Cloud SDK installation guide](https://cloud.google.com/sdk/docs/install-sdk).
 2. Follow the instructions based on your machine's architecture and operating system.
 
 ### Step 3: Initialize Google Cloud
@@ -33,7 +33,7 @@ gcloud auth application-default login
 ```
 
 ## Setting Up Unravel BigQuery Integration
-Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These project can be classified in to 2 based on the charecterestics.
+Unravel requires few permissions to access Bigquery API/Logs from the GCP projects to generate insights. These projects can be classified into 2 based on the characteristics.
 
 1. Monitoring Project(s): These are where BigQuery jobs run and need to be integrated with Unravel. Most of your projects likely fall into this category.
 
@@ -45,7 +45,7 @@ Unravel VM Identity-based authentication  for querying BigQuery API/logs. During
 We've automated the resource creation and configuration for you. Here's what you need to do:
 
 1. Unravel will provide you with a "Service Account" during onboarding.
-2. Terrafrom script in this repo will create IAM roles in your "Monitoring Projects" and "Admin Projects" in your GCP projects.
+2. The Terrafrom script in this repo will create IAM roles in your "Monitoring Projects" and "Admin Projects" in your GCP projects.
 3. These roles will be linked to the "Service Account" provided by Unravel.
 
 ## Customizing Your Configuration
@@ -77,7 +77,7 @@ Copy the example backend configuration file using this command:
 cp backend.tf.example backend.tf
 ```
 
-Update the backend.tf file with the Google Storage Path where the user running Terraform has access. 
+Update the backend.tf file with the Google Storage Path which the user running Terraform has access. 
 
 ## Creating Your Resources
 With everything set up, it's time to create the necessary resources:

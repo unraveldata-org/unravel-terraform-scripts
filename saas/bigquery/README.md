@@ -41,12 +41,18 @@ Unravel requires few permissions to access Bigquery API/Logs from the GCP projec
 
 Unravel VM Identity-based authentication  for querying BigQuery API/logs. During onboarding, Unravel will provide you with a service account.
 
-### Step 4: VM Identity-Based Authentication
+### Step 4: Workload Identity Federation based Authentication
 We've automated the resource creation and configuration for you. Here's what you need to do:
 
 1. Unravel will provide you with a "Service Account" during onboarding.
 2. The Terrafrom script in this repo will create IAM roles in your "Monitoring Projects" and "Admin Projects" in your GCP projects.
 3. These roles will be linked to the "Service Account" provided by Unravel.
+
+Clone the git repository
+
+```bash
+git clone https://github.com/unraveldata-org/unravel-terraform-scripts.git
+```
 
 ## Customizing Your Configuration
 To tailor the integration to your specific needs, you'll create a Terraform input file. Here's how:

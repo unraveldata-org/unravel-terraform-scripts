@@ -12,7 +12,7 @@ monitoring_project_ids = {
     }
 
 # Only required for VM and Single Auth model. Please remove for Multi auth model
-unravel_service_account = "unravel-saas-serviceaccount@iam.google"
+unravel_service_account = "serviceaccount@saas.iam.gserviceaccount.com"
 
 # [Optional] GCP admin project ID if using Collections and Reservations
 admin_project_ids = ["gcp-admin-project-1"]

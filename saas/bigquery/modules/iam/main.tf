@@ -44,7 +44,7 @@ resource "google_project_iam_member" "unravel_iam" {
 
   project = each.value
   role    = google_project_iam_custom_role.unravel_role[each.value].name
-  member  = var.unravel_service_account
+  member  = "serviceAccount:${var.unravel_service_account}"
 }
 
 
@@ -54,7 +54,7 @@ resource "google_project_iam_member" "admin_unravel_iam" {
 
   project = each.value
   role    = google_project_iam_custom_role.admin_project_unravel_role[each.value].name
-  member  = var.unravel_service_account
+  member  = "serviceAccount:${var.unravel_service_account}"
 }
 
 

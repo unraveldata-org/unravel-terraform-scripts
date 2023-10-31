@@ -66,3 +66,9 @@ variable "admin_and_monitoring_project_id_map" {
   type    = map(string)
   default = {}
 }
+
+variable "billing_project_id" {}
+variable "datapage_project_ids" {}
+variable "billing_project_role_permission" {}
+variable "billing_unravel_role" {}
+variable "monitoring_project_ids" {}

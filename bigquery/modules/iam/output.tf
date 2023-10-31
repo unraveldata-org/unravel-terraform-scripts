@@ -6,7 +6,7 @@ output "keys" {
 
 # Service account created and it's attributes
 output "unravel_service_account" {
-  value = var.multi_key_auth_model ? null : google_service_account.unravel_service_account
+  value = var.multi_key_auth_model ? null : google_service_account.multi_key_project_service_accounts[var.unravel_project_id]
 }
 
 # IAM roles created and it's attributes
@@ -51,3 +51,14 @@ output "admin_and_monitoring_project_binding" {
   value = google_project_iam_member.multi_key_admin_n_project_unravel_iam
 }
 
+output "billing_project_role" {
+  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null: google_project_iam_custom_role.billing_project_unravel_role
+}
+
+output "multi_billing_service_account" {
+  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null: google_service_account.multi_key_billing_service_accounts
+}
+
+output "multi_key_billing_unravel_iam" {
+  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null: google_project_iam_member.multi_key_billing_unravel_iam
+}

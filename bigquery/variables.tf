@@ -20,7 +20,7 @@ variable "monitoring_project_ids" {
   validation {
     condition = length([
       for project in values(var.monitoring_project_ids) : true
-      if can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", project))
+      if project == null || can(regex("^[a-zA-Z][A-Z0-9a-z-~%+_.]{2,}$", project))
     ]) == length(values(var.monitoring_project_ids))
     error_message = "Subscription ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-), periods (.), underscores (_), tildes (~), percents (%) or plus signs (+). Cannot start with goog."
   }
@@ -52,6 +52,20 @@ variable "unravel_project_id" {
   type        = string
 
   default = null
+}
+
+variable "datapage_project_ids" {
+  description = "GCP Project IDs for configuring Unravel Bigquery. Only those queries running in these projects will be monitored"
+  type        = list(string)
+
+  default = []
+}
+
+variable "billing_project_id" {
+  description = "ID of the GCP Project where Billing Export is configured"
+  type        = string
+
+  default = ""
 }
 
 # **Optional Variables/Variables with Default Values**
@@ -162,9 +176,21 @@ variable "multi_key_auth_model" {
   default = false
 }
 
-variable "pull_model" {
-  description = "Enables Pull model for PubSub topic"
-  type        = bool
+variable "polling_mode" {
+  description = "Method to fetch data: 'api' or 'information_schema'"
+  type        = string
+  default     = "api"
+}
 
-  default = true
+variable "billing_unravel_role" {
+  description = "Custom role name for GCP Billing accounts"
+  type        = string
+
+  default = "billing_unravel_role"
+
+  validation {
+    condition     = can(regex("^[a-z0-9_.]{3,64}$", var.billing_unravel_role))
+    error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-)."
+  }
+
 }

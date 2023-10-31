@@ -1,16 +1,16 @@
 # Log Router Sinks created by terraform
 output "sinks" {
-  value = module.unravel_sink.sinks
+  value = var.polling_mode == "schema" ? null : module.unravel_sink[0].sinks
 }
 
 # Pub/Sub topics created by terraform
 output "pub_sub" {
-  value = module.unravel_topics.pubsub_ids
+  value = var.polling_mode == "schema" ? null : module.unravel_topics[0].pubsub_ids
 }
 
 # Pub/Sub subscription id created by terraform
 output "subscription_id" {
-  value = module.unravel_topics.subscriptions
+  value = var.polling_mode == "schema" ? null : module.unravel_topics[0].subscriptions
 }
 
 # List of API's enabled for the projects

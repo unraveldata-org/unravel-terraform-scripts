@@ -52,13 +52,13 @@ output "admin_and_monitoring_project_binding" {
 }
 
 output "billing_project_role" {
-  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null: google_project_iam_custom_role.billing_project_unravel_role
+  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null : google_project_iam_custom_role.billing_project_unravel_role
 }
 
 output "multi_billing_service_account" {
-  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null: google_service_account.multi_key_billing_service_accounts
+  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null : google_service_account.multi_key_billing_service_accounts
 }
 
 output "multi_key_billing_unravel_iam" {
-  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null: google_project_iam_member.multi_key_billing_unravel_iam
+  value = contains(keys(var.monitoring_project_ids), var.billing_project_id) || var.billing_project_id == "" ? null : google_project_iam_member.multi_key_billing_unravel_iam
 }

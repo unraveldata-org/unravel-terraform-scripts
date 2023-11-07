@@ -241,7 +241,7 @@ To establish VM identity-based authentication with Unravel, the subsequent comma
 
 1. Set the authentication mode for the system and furnish the Unravel project ID.
 ```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode vm --project <unravel_project_id>
+<Unravel_installation_path>/manager config bigquery set-auth-mode vm --project <unravel_project_id> --no-integration 
 ```
 2. Integrate Monitoring projects into Unravel.
 ```bash
@@ -266,7 +266,7 @@ To establish Single key based authentication with Unravel, the subsequent comman
 
 1. Set the authentication mode for the system and furnish the Unravel project ID
 ```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode single --project <unravel_project_id> --credentials-file <path_to_credentials_file>
+<Unravel_installation_path>/manager config bigquery set-auth-mode single --project <unravel_project_id> --credentials-file <path_to_credentials_file> --no-integration 
 ```
 2.  Integrate Monitoring projects into Unravel.
 ```bash
@@ -293,7 +293,7 @@ To establish Multi key based authentication with Unravel, the subsequent command
 
 1.  Set the authentication mode for the system and furnish the Unravel project ID
 ```bash
-<Unravel_installation_path>/manager config bigquery set-auth-mode multi
+<Unravel_installation_path>/manager config bigquery set-auth-mode multi --no-integration 
 ````
 2. Integrate Monitoring projects into Unravel.
 ```bash

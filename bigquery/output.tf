@@ -23,6 +23,11 @@ output "unravel_service_account" {
   value = var.multi_key_auth_model ? null : module.unravel_iam.unravel_service_account
 }
 
+# Path to Unravel Keys location
+output "unravel_keys_location" {
+  value = var.multi_key_auth_model || var.key_based_auth_model ? var.unravel_keys_location : ""
+}
+
 # IAM roles created and it's attributes
 output "project_iam_role" {
   value = module.unravel_iam.project_iam_role
@@ -31,6 +36,7 @@ output "project_iam_role" {
 output "multi_key_project_service_accounts" {
   value = var.multi_key_auth_model ? module.unravel_iam.multi_key_project_service_accounts : null
 }
+
 output "multi_key_project_binding" {
   value = var.multi_key_auth_model ? module.unravel_iam.multi_key_project_binding : null
 }

@@ -68,7 +68,6 @@ locals {
     "bigquery.capacityCommitments.list",
     "bigquery.jobs.create",
     "bigquery.reservations.list",
-    "resourcemanager.projects.get"
   ]
 
   # Sink filter to get only the logs related to bigquery

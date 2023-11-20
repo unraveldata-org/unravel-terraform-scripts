@@ -67,8 +67,7 @@ locals {
   admin_project_role_permission = [
     "bigquery.capacityCommitments.list",
     "bigquery.jobs.create",
-    "bigquery.reservations.list",
-    "resourcemanager.projects.get"
+    "bigquery.reservations.list"
   ]
 
   # Sink filter to get only the logs related to bigquery

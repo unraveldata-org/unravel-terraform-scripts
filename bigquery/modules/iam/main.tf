@@ -5,7 +5,6 @@ locals {
   datapage_project_ids_map = { for project in toset(var.datapage_project_ids) : project => project }
   all_project_ids          = var.multi_key_auth_model ? var.project_ids : merge(var.project_ids, local.unravel_project_id, local.datapage_project_ids_map)
 
-  get_data_permission = ["bigquery.tables.getData"]
 
 }
 
@@ -22,8 +21,7 @@ resource "google_project_iam_custom_role" "unravel_role" {
   role_id     = var.unravel_role
   title       = "Unravel Bigquery Role"
   description = "Unravel Bigquery Role to grant access to Read permissions in Bigquery projects"
-  permissions = concat(contains(var.datapage_project_ids, each.key) ? concat(var.role_permission, local.get_data_permission) : var.role_permission,
-  var.billing_project_id == each.key ? var.billing_project_role_permission : [])
+  permissions = concat(var.role_permission, var.billing_project_id == each.key ? var.billing_project_role_permission : [])
 }
 
 # Create Service accounts for all Monitoring projects if Multi Key auth is enabled

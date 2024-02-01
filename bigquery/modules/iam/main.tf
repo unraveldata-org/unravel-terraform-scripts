@@ -21,7 +21,7 @@ resource "google_project_iam_custom_role" "unravel_role" {
   role_id     = var.unravel_role
   title       = "Unravel Bigquery Role"
   description = "Unravel Bigquery Role to grant access to Read permissions in Bigquery projects"
-  permissions = concat(var.role_permission,var.billing_project_id == each.key ? var.billing_project_role_permission : [])
+  permissions = concat(var.role_permission, var.billing_project_id == each.key ? var.billing_project_role_permission : [])
 }
 
 # Create Service accounts for all Monitoring projects if Multi Key auth is enabled

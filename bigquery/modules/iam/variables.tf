@@ -67,6 +67,10 @@ variable "admin_and_monitoring_project_id_map" {
   default = {}
 }
 
+variable "unravel_workload_account"{
+  type        = string
+}
+
 variable "billing_project_id" {}
 variable "datapage_project_ids" {}
 variable "billing_project_role_permission" {}

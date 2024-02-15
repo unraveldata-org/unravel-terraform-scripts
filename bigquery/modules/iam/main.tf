@@ -29,7 +29,7 @@ resource "google_service_account" "multi_key_project_service_accounts" {
 
 #  for_each     = var.multi_key_auth_model ? local.all_project_ids : local.unravel_project_id
 #  for_each     = var.multi_key_auth_model ? local.all_project_ids : var.unravel_workload_account ? {}: local.unravel_project_id
-  for_each = var.multi_key_auth_model ? local.all_project_ids : var.unravel_workload_account != null ? {} : { local.unravel_project_id }
+  for_each     = var.multi_key_auth_model ? local.all_project_ids : var.unravel_workload_account !="" ? {} : local.unravel_project_id
   project      = each.value
   account_id   = var.unravel_service_account
   display_name = "Unravel Bigquery Service Account"
@@ -89,7 +89,7 @@ resource "google_project_iam_member" "unravel_iam" {
 
   project = each.value
   role    = google_project_iam_custom_role.unravel_role[each.value].name
-  member  = var.unravel_workload_account ? "serviceAccount:${google_service_account.multi_key_project_service_accounts[var.unravel_project_id].email}" : "serviceAccount:${var.unravel_workload_account}"
+  member  = var.unravel_workload_account =="" ? "serviceAccount:${google_service_account.multi_key_project_service_accounts[var.unravel_project_id].email}" : "serviceAccount:${var.unravel_workload_account}"
 #  member  = "serviceAccount:${google_service_account.multi_key_project_service_accounts[var.unravel_project_id].email}"
 }
 
@@ -100,7 +100,7 @@ resource "google_project_iam_member" "admin_unravel_iam" {
 
   project = each.value
   role    = google_project_iam_custom_role.admin_project_unravel_role[each.value].name
-  member  = var.unravel_workload_account ? "serviceAccount:${google_service_account.multi_key_project_service_accounts[var.unravel_project_id].email}" : "serviceAccount:${var.unravel_workload_account}"
+  member  = var.unravel_workload_account =="" ? "serviceAccount:${google_service_account.multi_key_project_service_accounts[var.unravel_project_id].email}" : "serviceAccount:${var.unravel_workload_account}"
  # member  = "serviceAccount:${google_service_account.multi_key_project_service_accounts[var.unravel_project_id].email}"
 }
 

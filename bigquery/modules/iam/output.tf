@@ -6,7 +6,8 @@ output "keys" {
 
 # Service account created and it's attributes
 output "unravel_service_account" {
-  value = var.multi_key_auth_model ? null : google_service_account.multi_key_project_service_accounts[var.unravel_project_id]
+#  value = var.multi_key_auth_model ? null : google_service_account.multi_key_project_service_accounts[var.unravel_project_id]
+  value = var.multi_key_auth_model ? null : var.unravel_workload_account =="" ? google_service_account.multi_key_project_service_accounts[var.unravel_project_id] : var.unravel_workload_account
 }
 
 # IAM roles created and it's attributes

@@ -68,7 +68,7 @@ variable "admin_and_monitoring_project_id_map" {
 }
 
 variable "unravel_workload_account"{
-  type        = string
+  type    = string
 }
 
 variable "billing_project_id" {}

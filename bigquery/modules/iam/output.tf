@@ -6,8 +6,8 @@ output "keys" {
 
 # Service account created and it's attributes
 output "unravel_service_account" {
-#  value = var.multi_key_auth_model ? null : google_service_account.multi_key_project_service_accounts[var.unravel_project_id]
-  value = var.multi_key_auth_model ? null : var.unravel_workload_account =="" ? google_service_account.multi_key_project_service_accounts[var.unravel_project_id] : var.unravel_workload_account
+  #  value = var.multi_key_auth_model ? null : google_service_account.multi_key_project_service_accounts[var.unravel_project_id]
+  value = var.multi_key_auth_model ? null : var.unravel_workload_account == "" ? google_service_account.multi_key_project_service_accounts[var.unravel_project_id] : var.unravel_workload_account
 }
 
 # IAM roles created and it's attributes
@@ -42,6 +42,10 @@ output "multi_key_admin_binding" {
 
 output "unravel_binding" {
   value = var.multi_key_auth_model ? null : google_project_iam_member.unravel_iam
+}
+
+output "unravel_billing_binding" {
+  value = var.multi_key_auth_model && local.billing_only_project_map =={} ? null : google_project_iam_member.billing_unravel_iam
 }
 
 output "admin_only_project_binding" {

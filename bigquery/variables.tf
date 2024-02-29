@@ -194,3 +194,16 @@ variable "billing_unravel_role" {
   }
 
 }
+
+variable "billing_unravel_role" {
+  description = "Custom role name for GCP Billing accounts"
+  type        = string
+
+  default = "billing_unravel_role"
+
+  validation {
+    condition     = can(regex("^[a-z0-9_.]{3,64}$", var.billing_unravel_role))
+    error_message = "ID must start with a letter, and contain only the following characters: letters, numbers, dashes (-)."
+  }
+
+}

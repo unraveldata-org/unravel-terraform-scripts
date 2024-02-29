@@ -30,26 +30,30 @@ datapage_project_ids = ["unravel-gcp-project-1"]
 
 
 # [Optional] GCP Project ID where Billing exports are configured.
-# Note: These projects must be associated with the Monitoring project.
-billing_project_id = "unravel-gcp-project-2"
+billing_project_id = "unravel-gcp-project-4"
 
 
 # [Required] Authentication mode of unravel, 
 # 1. Single Key based
 #       key_based_auth_model = true
 #       multi_key_auth_model = false
+#       The unravel_workload_account variable should be empty.
 #
-# 2. VM Identity based  [default]
+# 2. VM Identity based
 #       key_based_auth_model = false
 #       multi_key_auth_model = false
+#       The unravel_workload_account variable should be empty.
 #
 # 3. Multi Key based authentication
 #       key_based_auth_model = false
 #       multi_key_auth_model = true
+#       The unravel_workload_account variable should have a value.
 #
+#If unravel_workload_account is empty then VM Identity based model will default
+
 key_based_auth_model = false
 multi_key_auth_model = false
-
+unravel_workload_account = ""
 
 # [Required] Pull/Push/Schema model
 # 1. API based with Pull subscription. [default]

@@ -182,6 +182,11 @@ variable "polling_mode" {
   default     = "api"
 }
 
+variable "unravel_workload_account" {
+  description = "Unravel service account with workload identity federation"
+  type        = string
+}
+
 variable "billing_unravel_role" {
   description = "Custom role name for GCP Billing accounts"
   type        = string

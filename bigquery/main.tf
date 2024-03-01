@@ -48,7 +48,7 @@ module "unravel_iam" {
   admin_project_role_permission       = local.admin_project_role_permission
   billing_project_role_permission     = local.billing_project_role_permission
   monitoring_project_ids              = var.monitoring_project_ids
-  billing_unravel_role                = var.billing_unravel_role
+  billing_unravel_role                = "${var.billing_unravel_role}_${random_integer.unique_id.id}"
   unravel_role                        = "${var.unravel_role}_${random_integer.unique_id.id}"
   admin_unravel_role                  = "${var.admin_unravel_role}_${random_integer.unique_id.id}"
   unravel_service_account             = "${var.unravel_service_account}-${random_integer.unique_id.id}"

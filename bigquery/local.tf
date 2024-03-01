@@ -84,7 +84,9 @@ locals {
 
   billing_project_role_permission = [
     "bigquery.jobs.create",
-    "bigquery.tables.getData"
+    "bigquery.tables.getData",
+    "bigquery.datasets.get",
+    "bigquery.tables.get"
   ]
   # Sink filter to get only the logs related to bigquery
   sink_filter = "(resource.type=\"bigquery_resource\" AND ((protoPayload.methodName=\"jobservice.insert\" AND  protoPayload.serviceData.jobInsertResponse.resource.jobName.jobId :*) OR (protoPayload.methodName=\"jobservice.jobcompleted\" AND protoPayload.serviceData.jobCompletedEvent.job.jobName.jobId :*))) OR (resource.type=\"bigquery_dts_config\" AND (labels.run_id :* AND resource.labels.config_id :*))"

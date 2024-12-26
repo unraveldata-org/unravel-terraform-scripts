@@ -47,7 +47,8 @@ locals {
     "recommender.bigqueryPartitionClusterRecommendations.get",
     "recommender.bigqueryPartitionClusterRecommendations.list",
     "resourcemanager.projects.get",
-    "serviceusage.services.use"
+    "serviceusage.services.use",
+    "resourcemanager.projects.getIamPolicy"
   ], var.x_svc_acc_permissions)
 
   # Permission required for the Unravel application to gather metrics and generate insights for Information Schema based polling model
@@ -69,7 +70,8 @@ locals {
     "recommender.bigqueryPartitionClusterRecommendations.get",
     "recommender.bigqueryPartitionClusterRecommendations.list",
     "resourcemanager.projects.get",
-    "serviceusage.services.use"
+    "serviceusage.services.use",
+    "resourcemanager.projects.getIamPolicy"
   ], var.x_svc_acc_permissions)
 
   # Identify the permission required based on the polling mode

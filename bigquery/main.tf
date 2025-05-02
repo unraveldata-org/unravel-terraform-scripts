@@ -58,6 +58,7 @@ module "unravel_iam" {
   unravel_keys_location               = var.unravel_keys_location
   admin_only_project_ids_map          = local.admin_only_project_ids_map
   admin_and_monitoring_project_id_map = local.admin_and_monitoring_project_id_map
+  unravel_workload_account            = var.unravel_workload_account
 
   depends_on = [
   data.google_project.project, module.google_enable_api]

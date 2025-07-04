@@ -68,6 +68,8 @@ terraform plan --var-file=input.tfvars
 
 ### 6. Apply the Configuration
 
+terraform apply --var-file=input.tfvars
+
 *Confirm with `yes` when prompted.*
 
 ---
@@ -77,7 +79,6 @@ terraform plan --var-file=input.tfvars
 After applying, you can inspect the outputs:
 
 terraform output
-
 
 ---
 

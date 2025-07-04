@@ -36,18 +36,18 @@ cp input.tfvars.example input.tfvars
 
 
 Edit `input.tfvars`:
+
 input.tfvars
 GCP Project ID where resources will be created
-
 project_id = "your-project-id"
+
 Region where Cloud Run should be deployed
-
 region = "your-region" # e.g., "us-central1"
+
 Name of the Cloud Run service
-
 service_name = "unravel-bq-data-masking"
-Docker image to be deployed
 
+Docker image to be deployed
 docker_image = "us-central1-docker.pkg.dev/unravel-flat-rate-test/cloud-run-source-deploy/bq-transform-fns:555b70b"
 
 

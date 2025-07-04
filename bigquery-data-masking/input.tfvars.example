@@ -1,5 +1,5 @@
 # GCP Project ID
-project_id = "unravel-flat-rate-test"
+project_id = "GCP_PROJECT_ID"
 
 # GCP project region
 region     = "us-central1"
@@ -8,6 +8,6 @@ region     = "us-central1"
 service_name = "unravel-bq-data-masking" 
 
 # Docker image
-docker_image = "us-central1-docker.pkg.dev/unravel-flat-rate-test/cloud-run-source-deploy/bq-transform-fns:555b70b"
+docker_image = "us-central1-docker.pkg.dev/GCP_PROJECT_ID/cloud-run-source-deploy/bq-transform-fns:555b70b"
 
 

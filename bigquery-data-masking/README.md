@@ -50,7 +50,7 @@ Name of the Cloud Run service
 service_name = "unravel-bq-data-masking"
 
 Docker image to be deployed
-docker_image = "us-central1-docker.pkg.dev/unravel-flat-rate-test/cloud-run-source-deploy/bq-transform-fns:555b70b"
+docker_image = "us-central1-docker.pkg.dev/GCP_PROJECT_ID/cloud-run-source-deploy/bq-transform-fns:555b70b"
 
 
 ---

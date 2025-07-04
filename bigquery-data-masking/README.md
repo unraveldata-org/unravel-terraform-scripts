@@ -30,26 +30,36 @@ gcloud auth application-default login
 
 ### 3. Customize Configuration
 
-Copy the example input file and edit with your project-specific values:
+a. Copy the Example Input File
+
+First, copy the example configuration file:
 
 cp input.tfvars.example input.tfvars
 
+b. Edit Your Configuration
 
-Edit `input.tfvars`:
+Open input.tfvars in your favorite editor and update the following values with your project details:
 
-input.tfvars
-GCP Project ID where resources will be created
+# input.tfvars
+
+# GCP Project ID where resources will be created
 project_id = "your-project-id"
 
-Region where Cloud Run should be deployed
-region = "your-region" # e.g., "us-central1"
+# Region where Cloud Run should be deployed (e.g., "us-central1")
+region = "your-region"
 
-Name of the Cloud Run service
+# Name of the Cloud Run service
 service_name = "unravel-bq-data-masking"
 
-Docker image to be deployed
+# Docker image to be deployed
 docker_image = "us-central1-docker.pkg.dev/unravel-flat-rate-test/cloud-run-source-deploy/bq-transform-fns:555b70b"
 
+Example:
+
+project_id   = "my-gcp-project"
+region       = "us-central1"
+service_name = "unravel-bq-data-masking"
+docker_image = "us-central1-docker.pkg.dev/unravel-flat-rate-test/cloud-run-source-deploy/bq-transform-fns:555b70b"
 
 
 ---

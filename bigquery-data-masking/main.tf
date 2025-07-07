@@ -76,18 +76,52 @@ resource "null_resource" "dlp_de_identify_template" {
   provisioner "local-exec" {
     when    = create
     command = <<EOF
+# Create De-identify template
 curl -s https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/locations/${self.triggers.region}/deidentifyTemplates \
---header "X-Goog-User-Project: ${var.project_id}" \
+--header "X-Goog-User-Project: ${self.triggers.project_id}" \
 --header "Authorization: Bearer $(gcloud auth print-access-token)" \
 --header 'Accept: application/json' \
 --header 'Content-Type: application/json' \
 --data '${jsonencode(local.de_identify_template_json)}'
+
+# Create Inspect template
+curl -s -X POST \
+-H "Authorization: Bearer $(gcloud auth print-access-token)" \
+-H "Accept: application/json" \
+-H "Content-Type: application/json" \
+-H "X-Goog-User-Project: ${self.triggers.project_id}" \
+"https://dlp.googleapis.com/v2/projects/${self.triggers.project_id}/locations/${self.triggers.region}/inspectTemplates" \
+-d '{
+  "inspectTemplate": {
+    "displayName": "Unravel Custom Inspect",
+    "description": "Include builtin infoType",
+    "inspectConfig": {
+      "infoTypes": [
+        { "name": "EMAIL_ADDRESS" },
+        { "name": "PHONE_NUMBER" },
+        { "name": "PASSPORT" },
+        { "name": "PERSON_NAME" },
+        { "name": "IP_ADDRESS" },
+        { "name": "LAST_NAME" },
+        { "name": "FIRST_NAME" },
+        { "name": "FINANCIAL_ACCOUNT_NUMBER" },
+        { "name": "DRIVERS_LICENSE_NUMBER" },
+        { "name": "DATE_OF_BIRTH" },
+        { "name": "US_SOCIAL_SECURITY_NUMBER" },
+        { "name": "PASSWORD" },
+        { "name": "CREDIT_CARD_NUMBER" }
+      ],
+      "includeQuote": true
+    }
+  }
+}'
 EOF
   }
 
   provisioner "local-exec" {
     when    = destroy
     command = <<EOF
+# Delete De-identify template
 curl -s --request DELETE \
 https://dlp.googleapis.com/v2/${self.triggers.dlp_de_id_template_full_path} \
 --header "X-Goog-User-Project: ${self.triggers.project_id}" \
@@ -117,14 +151,21 @@ resource "null_resource" "bq_dlp_encrypt_function" {
   provisioner "local-exec" {
     when    = create
     command = <<EOF
-bq query --project_id "${self.triggers.project_id}" \
---use_legacy_sql=false \
-"CREATE OR REPLACE FUNCTION ${self.triggers.dataset_id}.dlp_freetext_encrypt(v STRING) RETURNS STRING \
-REMOTE WITH CONNECTION \`${self.triggers.project_id}.${self.triggers.region}.${google_bigquery_connection.external_bq_fn_connection.connection_id}\` \
-OPTIONS (endpoint = '${self.triggers.cloud_run_uri}', user_defined_context = [('mode', 'deidentify'),('algo','dlp'),('dlp-deid-template','${null_resource.dlp_de_identify_template.triggers.dlp_de_id_template_full_path}'),('dlp-inspect-template','${var.dlp_inspect_template_full_path}')]);"
+bq query --project_id ${self.triggers.project_id} --use_legacy_sql=false "
+CREATE OR REPLACE FUNCTION ${self.triggers.dataset_id}.dlp_freetext_encrypt(v STRING)
+RETURNS STRING
+REMOTE WITH CONNECTION \`${self.triggers.project_id}.${self.triggers.region}.${google_bigquery_connection.external_bq_fn_connection.connection_id}\`
+OPTIONS (
+  endpoint = '${self.triggers.cloud_run_uri}',
+  user_defined_context = [
+    ('mode', 'deidentify'),
+    ('algo','dlp'),
+    ('dlp-deid-template','${null_resource.dlp_de_identify_template.triggers.dlp_de_id_template_full_path}'),
+    ('dlp-inspect-template','${var.dlp_inspect_template_full_path}')
+  ]
+);"
 EOF
-  }
-
+}
   provisioner "local-exec" {
     when    = destroy
     command = <<EOF

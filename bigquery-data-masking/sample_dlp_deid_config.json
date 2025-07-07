@@ -38,7 +38,216 @@
                   }
                 },
                 "surrogateInfoType": {
-                  "name": "BQ_TRF_PH"
+                  "name": "BQ_TRF_PHONE"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PERSON_NAME"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_PNAME"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PASSPORT"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_PASSPORT"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "IP_ADDRESS"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_IP"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "LAST_NAME"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_LNAME"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "FIRST_NAME"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_FNAME"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "FINANCIAL_ACCOUNT_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_FACCOUNT"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "DRIVERS_LICENSE_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_DLIC"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "DATE_OF_BIRTH"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_DOB"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "US_SOCIAL_SECURITY_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_SSN"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PASSWORD"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_PWD"
+                }
+              }
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "CREDIT_CARD_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "cryptoDeterministicConfig": {
+                "cryptoKey": {
+                  "unwrapped": {
+                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
+                  }
+                },
+                "surrogateInfoType": {
+                  "name": "BQ_TRF_CCARD"
                 }
               }
             }

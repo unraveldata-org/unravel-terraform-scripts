@@ -26,6 +26,7 @@ cd unravel-bq-data-masking
 ### 2. Authenticate with Google Cloud
 
 gcloud init
+
 gcloud auth application-default login
 
 

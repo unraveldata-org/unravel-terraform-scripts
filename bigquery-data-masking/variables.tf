@@ -16,9 +16,9 @@ variable "dlp_deid_template_json_file" {
   default = "sample_dlp_deid_config.json"
 }
 
-variable "dlp_inspect_template_full_path" {
+variable "dlp_inspect_template_json_file" {
   type    = string
-  default = ""
+  default = "sample_dlp_inspect_config.json"
 }
 
 variable "service_name" {

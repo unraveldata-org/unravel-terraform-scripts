@@ -20,7 +20,7 @@ Make sure you have the following tools installed:
 
 git clone https://github.com/unraveldata-org/unravel-terraform-scripts.git
 
-cd unravel-bq-data-masking
+cd bigquery-data-masking
 
 
 ### 2. Authenticate with Google Cloud

@@ -19,6 +19,7 @@ Make sure you have the following tools installed:
 ### 1. Clone this Repository
 
 git clone https://github.com/unraveldata-org/unravel-bq-data-masking.git
+
 cd unravel-bq-data-masking
 
 

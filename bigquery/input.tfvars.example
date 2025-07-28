@@ -58,4 +58,4 @@ multi_key_auth_model = false
 #       polling_model = "push"
 # 3. Information Schema based model.
 #       polling_model = "schema"
-polling_mode = "pull"
+polling_mode = "schema"

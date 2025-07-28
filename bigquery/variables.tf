@@ -61,11 +61,9 @@ variable "datapage_project_ids" {
   default = []
 }
 
-variable "billing_project_id" {
-  description = "ID of the GCP Project where Billing Export is configured"
-  type        = string
-
-  default = ""
+variable "billing_project_ids" {
+  description = "List of GCP Project IDs where Billing exports are configured."
+  type        = list(string)
 }
 
 # **Optional Variables/Variables with Default Values**

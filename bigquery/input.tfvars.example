@@ -31,7 +31,7 @@ datapage_project_ids = ["unravel-gcp-project-1"]
 
 # [Optional] GCP Project ID where Billing exports are configured.
 # Note: These projects must be associated with the Monitoring project.
-billing_project_id = "unravel-gcp-project-2"
+billing_project_ids = ["unravel-gcp-project-1"]
 
 
 # [Required] Authentication mode of unravel, 

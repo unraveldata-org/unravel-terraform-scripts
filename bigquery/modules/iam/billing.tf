@@ -13,9 +13,9 @@ locals {
 resource "google_project_iam_custom_role" "billing_project_unravel_role" {
   count = length(local.billing_only_projects) > 0 ? length(local.billing_only_projects) : 0
 
-  project = local.billing_only_projects[count.index]
+  project     = local.billing_only_projects[count.index]
   title       = "Unravel Billing Role"
-  role_id = var.billing_unravel_role
+  role_id     = var.billing_unravel_role
   description = "Unravel Role for Billing project with reservations/collections"
   permissions = var.billing_project_role_permission
 }

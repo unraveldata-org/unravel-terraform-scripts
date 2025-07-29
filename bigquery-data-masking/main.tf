@@ -52,7 +52,7 @@ resource "google_project_iam_binding" "grant_bq_connection_run_invoker_role" {
 resource "google_bigquery_dataset" "routines_dataset" {
   project    = var.project_id
   location   = var.region
-  dataset_id = var.bq_dataset
+  dataset_id = local.bq_dataset
 }
 
 resource "random_id" "random_de_id_template_id_random" {
@@ -140,7 +140,7 @@ resource "null_resource" "bq_dlp_encrypt_function" {
   triggers = {
     project_id         = var.project_id
     region             = var.region
-    dataset_id         = var.bq_dataset
+    dataset_id         = local.bq_dataset
     cloud_service_name = google_cloud_run_v2_service.bq_function.id
     cloud_run_uri      = google_cloud_run_v2_service.bq_function.uri
   }

@@ -6,10 +6,6 @@ variable "region" {
   type = string
 }
 
-variable "bq_dataset" {
-  type    = string
-  default = "fns_1"
-}
 
 variable "dlp_deid_template_json_file" {
   type    = string

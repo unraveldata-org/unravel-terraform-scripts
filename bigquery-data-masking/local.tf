@@ -6,6 +6,7 @@ locals {
   de_inspect_template_json = jsondecode(file(var.dlp_inspect_template_json_file))
   dlp_inspect_template_full_path = "projects/${var.project_id}/locations/${var.region}/inspectTemplates/${local.inspect_template_id}"
   
-  bq_dataset = "fns_${var.region}"
+  sanitized_region = replace(var.region, "-", "_")
+  bq_dataset       = "fns_${local.sanitized_region}"
 }
 

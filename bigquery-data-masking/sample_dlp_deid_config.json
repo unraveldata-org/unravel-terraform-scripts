@@ -1,0 +1,142 @@
+{
+  "deidentifyTemplate" : {
+    "displayName" : "Personally Identifiable Information Masker",
+    "description":"De-identifies personally identifiable information and mask it empty string.",
+    "deidentifyConfig": {
+      "infoTypeTransformations": {
+        "transformations": [
+          {
+            "infoTypes": [
+              {
+                "name": "EMAIL_ADDRESS"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PHONE_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PERSON_NAME"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PASSPORT"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "IP_ADDRESS"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "LAST_NAME"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "FIRST_NAME"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "FINANCIAL_ACCOUNT_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "DRIVERS_LICENSE_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "DATE_OF_BIRTH"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "US_SOCIAL_SECURITY_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "PASSWORD"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          },
+          {
+            "infoTypes": [
+              {
+                "name": "CREDIT_CARD_NUMBER"
+              }
+            ],
+            "primitiveTransformation": {
+              "redactConfig": {}
+            }
+          }
+        ]
+      }
+    }
+  }
+}

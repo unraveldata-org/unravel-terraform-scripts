@@ -1,0 +1,13 @@
+# GCP Project ID
+project_id = "GCP_PROJECT_ID"
+
+# GCP project region
+region     = "us-central1"
+
+# Cloud Run Name
+service_name = "unravel-bq-data-masking" 
+
+# Docker image
+docker_image = "us-central1-docker.pkg.dev/GCP_PROJECT_ID/cloud-run-source-deploy/bq-transform-fns:555b70b"
+
+

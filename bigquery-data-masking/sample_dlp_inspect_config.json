@@ -1,0 +1,25 @@
+{
+  "inspectTemplate": {
+    "displayName": "Unravel Custom Inspect",
+    "description": "Include builtin infoType",
+    "inspectConfig": {
+      "infoTypes": [
+        { "name": "EMAIL_ADDRESS" },
+        { "name": "PHONE_NUMBER" },
+        { "name": "PASSPORT" },
+        { "name": "PERSON_NAME" },
+        { "name": "IP_ADDRESS" },
+        { "name": "LAST_NAME" },
+        { "name": "FIRST_NAME" },
+        { "name": "FINANCIAL_ACCOUNT_NUMBER" },
+        { "name": "DRIVERS_LICENSE_NUMBER" },
+        { "name": "DATE_OF_BIRTH" },
+        { "name": "US_SOCIAL_SECURITY_NUMBER" },
+        { "name": "PASSWORD" },
+        { "name": "CREDIT_CARD_NUMBER" }
+      ],
+      "includeQuote": true
+    }
+  }
+}
+

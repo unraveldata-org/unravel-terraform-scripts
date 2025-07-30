@@ -1,7 +1,7 @@
 {
   "deidentifyTemplate" : {
-    "displayName" : "Email Id and Phone number masker",
-    "description":"De-identifies emails and phone numbers with unwrapped key.",
+    "displayName" : "Personally Identifiable Information Masker",
+    "description":"De-identifies personally identifiable information and mask it empty string.",
     "deidentifyConfig": {
       "infoTypeTransformations": {
         "transformations": [
@@ -12,16 +12,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_EMAIL"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -31,16 +22,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_PHONE"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -50,16 +32,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_PNAME"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -69,16 +42,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_PASSPORT"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -88,16 +52,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_IP"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -107,16 +62,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_LNAME"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -126,16 +72,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_FNAME"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -145,16 +82,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_FACCOUNT"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -164,16 +92,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_DLIC"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -183,16 +102,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_DOB"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -202,16 +112,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_SSN"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -221,16 +122,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_PWD"
-                }
-              }
+              "redactConfig": {}
             }
           },
           {
@@ -240,16 +132,7 @@
               }
             ],
             "primitiveTransformation": {
-              "cryptoDeterministicConfig": {
-                "cryptoKey": {
-                  "unwrapped": {
-                    "key": "VWtYcDJzNXY4eS9CP0UoSCtNYlFlU2hWbVlxM3Q2dzk="
-                  }
-                },
-                "surrogateInfoType": {
-                  "name": "BQ_TRF_CCARD"
-                }
-              }
+              "redactConfig": {}
             }
           }
         ]

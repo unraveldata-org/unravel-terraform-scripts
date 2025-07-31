@@ -41,7 +41,7 @@ module "unravel_iam" {
   source = "./modules/iam"
 
   project_ids                         = local.project_ids_map
-  billing_project_id                  = var.billing_project_id
+  billing_project_ids                 = var.billing_project_ids
   datapage_project_ids                = var.datapage_project_ids
   role_permission                     = local.role_permission
   admin_project_ids                   = local.admin_project_ids_map

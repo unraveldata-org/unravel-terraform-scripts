@@ -199,7 +199,7 @@ To enable Unravel Data Insights for Bigquery, it's necessary to set up resources
 ### Creating resources for Billing Projects.
 Unravel also requires access to the Cloud Billing exports table to provide valuable cost insights. This access involves specific permissions and configurations.
 
-**billing_project_id** (Optional)(string): Specify the GCP Project ID where GCP Cloud billing export is configured.
+**billing_project_ids** (Optional)(list): Specify the GCP Project IDs where GCP Cloud billing export is configured.
 
 ## Configuring Terraform Backend.(Optional)
 It is always recommended to keep the state file in a central storage. Please configure `backend.tf` file in the repo to use Google Storage as your Terraform state file storage.

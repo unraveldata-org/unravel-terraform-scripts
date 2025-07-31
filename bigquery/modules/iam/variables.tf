@@ -67,7 +67,11 @@ variable "admin_and_monitoring_project_id_map" {
   default = {}
 }
 
-variable "billing_project_id" {}
+variable "billing_project_ids" {
+  description = "List of GCP Project IDs for billing"
+  type        = list(string)
+}
+
 variable "datapage_project_ids" {}
 variable "billing_project_role_permission" {}
 variable "billing_unravel_role" {}

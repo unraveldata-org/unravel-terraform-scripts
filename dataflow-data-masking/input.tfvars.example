@@ -1,0 +1,10 @@
+project_id        = "PROJECT_ID"       # Example: MY-GCP-PROJECT
+region            = "REGION"           # Example: US-CENTRAL1
+
+template_gcs_path = "gs://BUCKET_NAME/PATH/TO/TEMPLATE.JSON"  # Dataflow template location
+temp_gcs_location = "gs://BUCKET_NAME/PATH/TO/TEMP"           # Temporary files location
+
+input_project_ids = "INPUT_PROJECT_ID"                        # Example: MY-GCP-PROJECT
+input_table       = "DATASET.INPUT_TABLE"                     # Example: DATASET.TABLE
+output_table      = "PROJECT_ID.DATASET.OUTPUT_TABLE"          # Example: MY-GCP-PROJECT.DATASET.TABLE
+

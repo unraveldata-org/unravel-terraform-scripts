@@ -1,0 +1,48 @@
+name: release-pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g., v1.0.1)"
+        required: true
+
+jobs:
+  release:
+    runs-on: [self-hosted, build]
+    container:
+      image: cerdo.unraveldata.com:50001/unravel-build/workflow-base-image:1.0
+      volumes:
+        - ${{github.workspace}}:${{github.workspace}}
+    permissions:
+      contents: write
+      packages: write   
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # ensure full history
+
+      - name: Extract version
+        id: vars
+        run: |
+          VERSION_INPUT="${{ github.event.inputs.version }}"
+          VERSION="${VERSION_INPUT#v}"   # Remove leading v if exists
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION=$VERSION"
+      
+      - name: Update VERSION file
+        run: |
+          echo "${{ env.VERSION }}" > VERSION
+          cat VERSION
+
+      - name: Create release branch and commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout -b release/v${{ env.VERSION }}
+          git add VERSION
+          git commit -m "chore(release): set version to ${{ env.VERSION }}"
+          git push origin release/v${{ env.VERSION }} 

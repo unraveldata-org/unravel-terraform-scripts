@@ -1,0 +1,4 @@
+project_id              = "your-gcp-project-id"
+region                  = "US"
+primary_contact_email   = "admin@yourdomain.com"
+unravel_principal_email = "serviceAccount:service-account-email-provided-by-unravel@unravel-data.com"

@@ -8,14 +8,14 @@ output "data_exchange_id" {
   value       = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
 }
 
-output "listing_name" {
-  description = "The resource name of the Analytics Hub Listing."
-  value       = google_bigquery_analytics_hub_listing.unravel_listing.name
+output "listing_names" {
+  description = "The resource names of the Analytics Hub Listings."
+  value       = { for k, v in google_bigquery_analytics_hub_listing.unravel_listing : k => v.name }
 }
 
-output "listing_id" {
-  description = "The ID of the Listing."
-  value       = google_bigquery_analytics_hub_listing.unravel_listing.listing_id
+output "listing_ids" {
+  description = "The IDs of the Listings."
+  value       = { for k, v in google_bigquery_analytics_hub_listing.unravel_listing : k => v.listing_id }
 }
 
 output "subscription_name" {

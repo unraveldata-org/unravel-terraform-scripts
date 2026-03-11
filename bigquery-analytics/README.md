@@ -1,54 +1,59 @@
-# BigQuery Analytics Hub Sharing (Unravel Health Check)
+# BigQuery Analytics Hub Data Clean Room (DCR)
 
-This Terraform configuration automates the setup of a **Google Cloud Analytics Hub Clean Room (Data Exchange)** and **Listing** to securely share BigQuery metadata with Unravel for health check purposes.
+This Terraform project automates the setup of a **BigQuery Analytics Hub Data Clean Room**, allowing you to share specific tables from a source dataset with external subscribers in a secure, audited environment.
 
-## Architecture
-- **Analytics Hub API:** Automatically enabled.
-- **Data Exchange:** Creates a "Clean Room" named `Unravel Data Share Clean Room`.
-- **Listing:** Creates a listing `Unravel Health Check Data` sharing an existing BigQuery dataset.
-- **IAM Permissions:** Grants the `roles/analyticshub.subscriber` role to the Unravel service account.
+## Architecture Overview
+
+1.  **Data Exchange**: Creates a BigQuery Analytics Hub Data Exchange configured as a Data Clean Room.
+2.  **Listings**: Creates separate listings for each shared table (required by DCR API which mandates exactly one resource per listing).
+3.  **IAM**: Grants `roles/analyticshub.subscriber` to the specified subscriber email.
+4.  **Automated Subscription**: Automatically creates a subscription for the subscriber, linking the data to a destination dataset in their project.
 
 ## Prerequisites
-1. **GCP Project:** An existing project with billing enabled.
-2. **Existing Dataset:** A BigQuery dataset named `unravel_share_US` must already exist in the `US` region.
-3. **Terraform:** version 1.0 or higher.
-4. **GCP Credentials:** Authenticated via `gcloud auth application-default login`.
 
-## Deployment Steps
+-   Terraform >= 1.3.0
+-   Google Cloud Provider >= 5.0.0
+-   Google Cloud Project with BigQuery and Analytics Hub APIs enabled.
+-   The user/service account running Terraform must have sufficient IAM permissions (BigQuery Admin or Analytics Hub Admin).
 
-### 1. Configure Variables
-Copy the example variable file and update it with your specific project details:
-```bash
-cp terraform.tfvars.example terraform.tfvars
-```
+## Configuration
 
-Edit `terraform.tfvars`:
-- `project_id`: Your GCP Project ID.
-- `primary_contact_email`: Your email address.
-- `unravel_principal_email`: The Unravel Service Account (e.g., `serviceAccount:sa-name@unravel-data.iam.gserviceaccount.com`).
+1.  Copy `terraform.tfvars.example` to `terraform.tfvars`:
+    ```bash
+    cp terraform.tfvars.example terraform.tfvars
+    ```
 
-### 2. Authentication (Local Development)
-If running from a local machine, ensure your ADC credentials include the project quota:
-```bash
-gcloud auth application-default login --update-adc --project YOUR_PROJECT_ID
-```
+2.  Update `terraform.tfvars` with your specific details:
+    -   `project_id`: Your Google Cloud Project ID.
+    -   `source_dataset_id`: The ID of the dataset containing the tables you want to share.
+    -   `shared_table_ids`: A list of full resource paths for the tables (e.g., `projects/MY_PROJECT/datasets/MY_DATASET/tables/MY_TABLE`).
+    -   `subscriber_email`: The Google account email of the person who will access the data.
+    -   `destination_dataset_id`: The ID of the dataset that will be created in the subscriber's project.
 
-### 3. Initialize & Apply
+## Usage
+
+### 1. Initialize Terraform
 ```bash
 terraform init
+```
+
+### 2. Preview Changes
+```bash
 terraform plan
+```
+
+### 3. Apply Changes
+```bash
 terraform apply
 ```
 
-## Outputs
-After a successful apply, Terraform will provide:
-- `listing_resource_name`: The ID you must share with the Unravel team so they can subscribe to the data.
-- `next_steps`: Detailed instructions for data population.
+## Important Notes
 
-## Data Population
-This Terraform only handles the **sharing mechanism**. Ensure you follow the "Secure Data Sharing" PDF to:
-1. Run the `apis_to_tables.ipynb` notebook.
-2. Execute the required SQL procedures to populate the `unravel_share_US` dataset.
+-   **Subscriber Email Logging**: This project enables `log_linked_dataset_query_user_email`. **Note:** Once enabled on a listing or exchange, it cannot be disabled without recreating the resource.
+-   **One Table Per Listing**: Due to Data Clean Room restrictions, each table in `shared_table_ids` is created as its own unique listing within the Data Exchange.
+-   **Destination Dataset**: The `destination_dataset_id` must not already exist in the project, as the subscription resource will attempt to create it. If it exists, the apply will fail with a `409 Already Exists` error.
 
-## Security Note
-**DO NOT commit `terraform.tfvars` or `*.tfstate` files to version control.** These files contain sensitive information and your specific environment state.
+## Troubleshooting
+
+-   **"Subscriber email logging cannot be disabled"**: This happens if you try to change the logging setting after the listing is created. If you must disable it, you must `terraform destroy` and re-apply.
+-   **"Exactly one resource for data clean rooms"**: This occurs if multiple tables are added to a single `bigquery_dataset` block. This project solves this by using a `for_each` loop to create one listing per table.

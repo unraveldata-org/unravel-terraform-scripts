@@ -1,72 +1,66 @@
-# ==========================================
-# Google Cloud Project Configuration
-# ==========================================
-
 variable "project_id" {
-  description = "The GCP Project ID where the Data Exchange and Listing will be created (the Publisher project)."
+  description = "The ID of the project in which to provision resources."
   type        = string
 }
 
 variable "region" {
-  description = "The GCP region for the dataset and Analytics Hub resources (e.g., US)."
+  description = "The region in which to provision resources."
+  type        = string
+  default     = "us-central1"
+}
+
+variable "location" {
+  description = "The location for the Data Exchange and Listing (e.g., US, EU)."
   type        = string
   default     = "US"
 }
 
-# ==========================================
-# Data Exchange & Listing Configuration
-# ==========================================
-
 variable "data_exchange_id" {
-  description = "A unique ID for the Analytics Hub Data Exchange. If you get a 409 Conflict, change this ID."
+  description = "The ID of the BigQuery Analytics Hub Data Exchange."
   type        = string
-  default     = "shared_data_unravel"
 }
 
 variable "data_exchange_display_name" {
-  description = "The human-readable name for the Clean Room shown in the GCP Console."
-  type        = string
-  default     = "Unravel Data Share Clean Room"
-}
-
-variable "primary_contact_email" {
-  description = "The email address of the person managing this Data Exchange (usually your admin email)."
+  description = "The display name of the Data Exchange."
   type        = string
 }
 
-variable "log_linked_dataset_query_user_email" {
-  description = "If true, Google will log the email address of every user who queries the shared data. Once enabled, this cannot be turned off."
-  type        = bool
-  default     = true
-}
-
-# ==========================================
-# Access Control (Unravel)
-# ==========================================
-
-variable "unravel_principal_email" {
-  description = "The Unravel Service Account provided to you (e.g., serviceAccount:sa-name@unravel-data.iam.gserviceaccount.com)."
+variable "primary_contact" {
+  description = "The primary contact email for the Data Exchange."
   type        = string
 }
 
-# ==========================================
-# Automated Subscription Configuration
-# ==========================================
-
-variable "enable_subscription" {
-  description = "Set to true to automatically 'accept' the listing and create a linked dataset in the subscriber project."
-  type        = bool
-  default     = false
+variable "source_dataset_id" {
+  description = "The ID of the existing dataset to be shared."
+  type        = string
 }
 
-variable "subscriber_project_id" {
-  description = "The Project ID where the subscription (linked dataset) will be created. Often the same as project_id for testing."
+variable "listing_id" {
+  description = "The ID of the Analytics Hub Listing."
   type        = string
-  default     = ""
+}
+
+variable "listing_display_name" {
+  description = "The display name of the Listing."
+  type        = string
+}
+
+variable "shared_table_id" {
+  description = "The full resource name of the table to share (e.g., projects/my-project/datasets/my-dataset/tables/my-table)."
+  type        = string
+}
+
+variable "subscriber_email" {
+  description = "The email of the user to grant subscriber permissions to."
+  type        = string
+}
+
+variable "subscription_id" {
+  description = "The ID of the Data Exchange subscription."
+  type        = string
 }
 
 variable "destination_dataset_id" {
-  description = "The ID for the new linked dataset created in the subscriber project."
+  description = "The ID of the dataset where the subscription will be created."
   type        = string
-  default     = "unravel_shared_metadata"
 }

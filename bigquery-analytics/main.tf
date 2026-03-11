@@ -1,101 +1,107 @@
+# --- 1. Provider Configuration ---
 terraform {
+  required_version = ">= 1.3.0"
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 6.30.0"
+      version = ">= 5.0.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = ">= 5.0.0"
     }
   }
 }
 
 provider "google" {
-  project = var.project_id
-  region  = var.region
-  
-  # This helps resolve the "quota project" error with local ADC
+  project               = var.project_id
+  region                = var.region
   user_project_override = true
-  billing_project       = var.project_id
 }
 
-# Enable the Analytics Hub API
-resource "google_project_service" "analyticshub" {
-  service            = "analyticshub.googleapis.com"
-  disable_on_destroy = false
+provider "google-beta" {
+  project               = var.project_id
+  region                = var.region
+  user_project_override = true
 }
 
-# 1. Reference the existing Dataset (US Region)
-data "google_bigquery_dataset" "unravel_share_us" {
-  dataset_id = "unravel_share_US"
-}
-
-# 2. Create a Standard Analytics Hub Data Exchange
+# --- 2. The Data Clean Room (Exchange) ---
 resource "google_bigquery_analytics_hub_data_exchange" "clean_room" {
+  provider         = google-beta
+  location         = var.location
   data_exchange_id = var.data_exchange_id
   display_name     = var.data_exchange_display_name
-  description      = "Data Exchange for sharing BigQuery metadata with Unravel"
-  location         = "US"
-  primary_contact  = var.primary_contact_email
+  description      = "Secure data sharing environment for engineering analytics."
+  primary_contact  = var.primary_contact
 
-  log_linked_dataset_query_user_email = var.log_linked_dataset_query_user_email
+  sharing_environment_config {
+    dcr_exchange_config {}
+  }
 
-  # Note: Removed dcr_exchange_config to support sharing the entire dataset
-  
-  # Ensure API is enabled first
-  depends_on = [google_project_service.analyticshub]
+  log_linked_dataset_query_user_email = true
 }
 
-# 3. Create a Listing to share the ENTIRE dataset
+# --- 3. Reference Existing Dataset ---
+data "google_bigquery_dataset" "unravel_ds" {
+  dataset_id = var.source_dataset_id
+  project    = var.project_id
+}
+
+# --- 4. The Listing ---
 resource "google_bigquery_analytics_hub_listing" "unravel_listing" {
+  provider         = google-beta
+  location         = google_bigquery_analytics_hub_data_exchange.clean_room.location
   data_exchange_id = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
-  listing_id       = "unravel_share_listing"
-  display_name     = "Unravel Health Check Data"
-  description      = "Listing containing BigQuery metadata for Unravel Health Check"
-  location         = "US"
-
-  primary_contact = var.primary_contact_email
-
-  log_linked_dataset_query_user_email = var.log_linked_dataset_query_user_email
+  listing_id       = var.listing_id
+  display_name     = var.listing_display_name
+  description      = "DCR Listing for analytics sharing."
 
   bigquery_dataset {
-    # Sharing the entire dataset is supported in standard exchanges
-    dataset = data.google_bigquery_dataset.unravel_share_us.id
+    dataset = data.google_bigquery_dataset.unravel_ds.id
+    selected_resources {
+      table = var.shared_table_id
+    }
+  }
+
+  restricted_export_config {
+    enabled = true
   }
 }
 
-# 4. Grant Subscriber Access to Unravel
-resource "google_bigquery_analytics_hub_listing_iam_member" "subscriber" {
+# --- 5. IAM: Grant Permission to Subscriber ---
+resource "google_bigquery_analytics_hub_data_exchange_iam_member" "subscriber_permission" {
+  provider         = google-beta
+  project          = var.project_id
+  location         = google_bigquery_analytics_hub_data_exchange.clean_room.location
   data_exchange_id = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
-  listing_id       = google_bigquery_analytics_hub_listing.unravel_listing.listing_id
-  location         = "US"
   role             = "roles/analyticshub.subscriber"
-  member           = var.unravel_principal_email
+  member           = "user:${var.subscriber_email}"
 }
 
-# 5. Automate Subscription (Subscriber Side) using gcloud
-# This is a workaround because Terraform doesn't support Standard Listing subscriptions yet.
-resource "null_resource" "subscribe_to_listing" {
-  count = var.enable_subscription ? 1 : 0
+# --- 6. The Automated Subscription ---
+resource "google_bigquery_analytics_hub_data_exchange_subscription" "unravel_sub" {
+  provider = google-beta
+  project  = var.project_id
+  location = var.location
 
-  triggers = {
-    listing_id = google_bigquery_analytics_hub_listing.unravel_listing.id
+  data_exchange_project  = var.project_id
+  data_exchange_location = var.location
+  data_exchange_id       = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
+
+  subscription_id    = var.subscription_id
+  subscriber_contact = var.subscriber_email
+
+  destination_dataset {
+    location = var.location
+    dataset_reference {
+      project_id = var.project_id
+      dataset_id = var.destination_dataset_id
+    }
+    friendly_name = "Subscribed Data Clean Room"
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-      curl -X POST \
-        -H "Authorization: Bearer $(gcloud auth print-access-token)" \
-        -H "Content-Type: application/json; charset=utf-8" \
-        -d '{
-          "destination_dataset": {
-            "dataset_reference": {
-              "project_id": "${var.subscriber_project_id}",
-              "dataset_id": "${var.destination_dataset_id}"
-            },
-            "location": "${var.region}"
-          }
-        }' \
-        "https://analyticshub.googleapis.com/v1/projects/${var.project_id}/locations/${var.region}/dataExchanges/${var.data_exchange_id}/listings/${google_bigquery_analytics_hub_listing.unravel_listing.listing_id}:subscribe"
-    EOT
-  }
+  refresh_policy = "ON_READ"
 
-  depends_on = [google_bigquery_analytics_hub_listing_iam_member.subscriber]
+  # Wait for IAM to propagate
+  depends_on = [google_bigquery_analytics_hub_data_exchange_iam_member.subscriber_permission]
 }

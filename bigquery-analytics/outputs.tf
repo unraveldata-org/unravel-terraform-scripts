@@ -1,26 +1,34 @@
-output "dataset_id" {
-  value = data.google_bigquery_dataset.unravel_share_us.dataset_id
-  description = "The ID of the existing BigQuery Dataset."
+output "data_exchange_name" {
+  description = "The resource name of the BigQuery Analytics Hub Data Exchange."
+  value       = google_bigquery_analytics_hub_data_exchange.clean_room.name
 }
 
 output "data_exchange_id" {
-  value = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
-  description = "The ID of the Analytics Hub Data Exchange."
+  description = "The ID of the Data Exchange."
+  value       = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
 }
 
-output "listing_resource_name" {
-  value = google_bigquery_analytics_hub_listing.unravel_listing.name
-  description = "The full resource name of the Listing. SHARE THIS WITH UNRAVEL."
+output "listing_name" {
+  description = "The resource name of the Analytics Hub Listing."
+  value       = google_bigquery_analytics_hub_listing.unravel_listing.name
 }
 
-output "next_steps" {
-  value = <<EOT
-Data Exchange and Listing created successfully!
+output "listing_id" {
+  description = "The ID of the Listing."
+  value       = google_bigquery_analytics_hub_listing.unravel_listing.listing_id
+}
 
-Next steps for sharing:
-1. POPULATE DATA: Run your Python notebook and SQL procedures to fill the dataset: ${data.google_bigquery_dataset.unravel_share_us.dataset_id}
-2. SHARE LINK: Provide the following resource name to the Unravel team:
-   ${google_bigquery_analytics_hub_listing.unravel_listing.name}
-3. SUBSCRIBE: The Unravel team (or you, using their account) can now go to 'Analytics Hub' in the GCP Console, find this listing, and click 'SUBSCRIBE' to create a linked dataset in their project.
-EOT
+output "subscription_name" {
+  description = "The resource name of the Data Exchange subscription."
+  value       = google_bigquery_analytics_hub_data_exchange_subscription.unravel_sub.name
+}
+
+output "subscription_id" {
+  description = "The ID of the Data Exchange subscription."
+  value       = google_bigquery_analytics_hub_data_exchange_subscription.unravel_sub.subscription_id
+}
+
+output "destination_dataset" {
+  description = "The destination dataset of the subscription."
+  value       = google_bigquery_analytics_hub_data_exchange_subscription.unravel_sub.destination_dataset
 }

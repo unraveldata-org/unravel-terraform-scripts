@@ -1,44 +1,13 @@
-# =============================================================================
-# UNRAVEL BIGQUERY ANALYTICS HUB CONFIGURATION
-# =============================================================================
-
-# 1. BASIC GCP SETTINGS
-# -----------------------------------------------------------------------------
-# The project where you are sharing data FROM.
-project_id            = "your-publisher-project-id"
-
-# The region where your 'unravel_share_US' dataset exists.
-region                = "US"
-
-# Your email for administrative contact.
-primary_contact_email = "admin@yourdomain.com"
-
-
-# 2. DATA EXCHANGE SETTINGS
-# -----------------------------------------------------------------------------
-# The ID for the 'Clean Room'. Use a new version if you need to recreate it.
-data_exchange_id      = "shared_data_unravel_v4"
-
-# Human-readable name for the GCP Console.
-data_exchange_display_name = "Unravel Data Share Clean Room"
-
-# Enable to see exactly who from Unravel is querying your data.
-log_linked_dataset_query_user_email = true
-
-
-# 3. UNRAVEL ACCESS
-# -----------------------------------------------------------------------------
-# Paste the Service Account provided by the Unravel team here.
-unravel_principal_email = "serviceAccount:sa-name@unravel-data.iam.gserviceaccount.com"
-
-
-# 4. AUTOMATED SUBSCRIPTION (OPTIONAL)
-# -----------------------------------------------------------------------------
-# Set to 'true' to automatically link the data to a project.
-enable_subscription    = true
-
-# The project where the data will be LINKED TO (can be the same as project_id).
-subscriber_project_id  = "your-subscriber-project-id"
-
-# The name of the linked dataset that will appear in BigQuery.
-destination_dataset_id = "unravel_shared_metadata"
+project_id                 = "unravel-flat-rate-test"
+region                     = "us-central1"
+location                   = "US"
+data_exchange_id           = "engineering_clean_room_v1"
+data_exchange_display_name = "Engineering_DCR_Primary"
+primary_contact            = "kinala@unraveldata.com"
+source_dataset_id          = "unravel_share_US"
+listing_id                 = "unravel_flat_rate_test_listing"
+listing_display_name       = "Utkarsh_testunravel-flat-rate-test"
+shared_table_id            = "projects/unravel-flat-rate-test/datasets/unravel_share_US/tables/ASSIGNMENTS_EU"
+subscriber_email           = "utkarsh2796@gmail.com"
+subscription_id            = "utkarsh_clean_room_sub"
+destination_dataset_id     = "subscribed_clean_room_data"

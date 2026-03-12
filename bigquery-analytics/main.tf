@@ -76,12 +76,13 @@ resource "google_bigquery_analytics_hub_listing" "unravel_listing" {
 
 # --- 5. IAM: Grant Permission to Subscriber ---
 resource "google_bigquery_analytics_hub_data_exchange_iam_member" "subscriber_permission" {
+  for_each         = toset(var.subscriber_emails)
   provider         = google-beta
   project          = var.project_id
   location         = google_bigquery_analytics_hub_data_exchange.clean_room.location
   data_exchange_id = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
   role             = "roles/analyticshub.subscriber"
-  member           = "user:${var.subscriber_email}"
+  member           = "user:${each.value}"
 }
 
 # --- 6. The Automated Subscription ---
@@ -95,7 +96,7 @@ resource "google_bigquery_analytics_hub_data_exchange_subscription" "unravel_sub
   data_exchange_id       = google_bigquery_analytics_hub_data_exchange.clean_room.data_exchange_id
 
   subscription_id    = var.subscription_id
-  subscriber_contact = var.subscriber_email
+  subscriber_contact = var.subscriber_emails[0]
 
   destination_dataset {
     location = var.location

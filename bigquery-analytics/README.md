@@ -27,7 +27,7 @@ This Terraform project automates the setup of a **BigQuery Analytics Hub Data Cl
     -   `project_id`: Your Google Cloud Project ID.
     -   `source_dataset_id`: The ID of the dataset containing the tables you want to share.
     -   `shared_table_ids`: A list of full resource paths for the tables (e.g., `projects/MY_PROJECT/datasets/MY_DATASET/tables/MY_TABLE`).
-    -   `subscriber_email`: The Google account email of the person who will access the data.
+    -   `subscriber_emails`: A list of Google account emails of the people who will access the data.
     -   `destination_dataset_id`: The ID of the dataset that will be created in the subscriber's project.
 
 ## Usage

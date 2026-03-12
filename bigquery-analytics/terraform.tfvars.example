@@ -11,6 +11,6 @@ shared_table_ids        = [
   "projects/unravel-flat-rate-test/datasets/unravel_share_US/tables/ASSIGNMENTS_EU",
   "projects/unravel-flat-rate-test/datasets/unravel_share_US/tables/COLUMNS_US"
 ]
-subscriber_email           = "utkarsh2796@gmail.com"
+subscriber_emails          = ["utkarsh2796@gmail.com, kinala@unraveldata.com"]
 subscription_id            = "utkarsh_clean_room_sub"
 destination_dataset_id     = "subscribed_clean_room_data"

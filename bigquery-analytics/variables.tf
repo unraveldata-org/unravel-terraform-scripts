@@ -50,9 +50,9 @@ variable "shared_table_ids" {
   type        = list(string)
 }
 
-variable "subscriber_email" {
-  description = "The email of the user to grant subscriber permissions to."
-  type        = string
+variable "subscriber_emails" {
+  description = "A list of emails of the users to grant subscriber permissions to."
+  type        = list(string)
 }
 
 variable "subscription_id" {

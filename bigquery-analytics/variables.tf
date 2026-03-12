@@ -45,9 +45,9 @@ variable "listing_display_name" {
   type        = string
 }
 
-variable "shared_table_id" {
-  description = "The full resource name of the table to share (e.g., projects/my-project/datasets/my-dataset/tables/my-table)."
-  type        = string
+variable "shared_table_ids" {
+  description = "The list of full resource names of the tables to share (e.g., projects/my-project/datasets/my-dataset/tables/my-table)."
+  type        = list(string)
 }
 
 variable "subscriber_email" {

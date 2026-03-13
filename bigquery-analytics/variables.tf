@@ -20,47 +20,26 @@ variable "data_exchange_id" {
   type        = string
 }
 
-variable "data_exchange_display_name" {
-  description = "The display name of the Data Exchange."
-  type        = string
-}
-
 variable "primary_contact" {
   description = "The primary contact email for the Data Exchange."
   type        = string
 }
 
-variable "source_dataset_id" {
-  description = "The ID of the existing dataset to be shared."
-  type        = string
-}
+variable "listings" {
+  description = <<EOT
+List of listings to create. Each object must contain:
+- listing_id:           The Analytics Hub listing ID.
+- source_dataset_id:    The ID of the source dataset containing the table.
+- shared_table_id:      The full resource name of the table to share (e.g., projects/my-project/datasets/my-dataset/tables/my-table).
+EOT
 
-variable "listing_id" {
-  description = "The ID of the Analytics Hub Listing."
-  type        = string
+  type = list(object({
+    listing_id        = string
+    source_dataset_id = string
+    shared_table_id   = string
+  }))
 }
-
-variable "listing_display_name" {
-  description = "The display name of the Listing."
-  type        = string
-}
-
-variable "shared_table_ids" {
-  description = "The list of full resource names of the tables to share (e.g., projects/my-project/datasets/my-dataset/tables/my-table)."
-  type        = list(string)
-}
-
 variable "subscriber_emails" {
-  description = "A list of emails of the users to grant subscriber permissions to."
+  description = "The email addresses of the users to grant subscriber permissions to."
   type        = list(string)
-}
-
-variable "subscription_id" {
-  description = "The ID of the Data Exchange subscription."
-  type        = string
-}
-
-variable "destination_dataset_id" {
-  description = "The ID of the dataset where the subscription will be created."
-  type        = string
 }

@@ -1,30 +1,15 @@
-project_id                 = "unravel-flat-rate-test"
+project_id                 = "{projectID}"
 region                     = "us-central1"
 location                   = "US"
-data_exchange_id           = "engineering_clean_room_v1"
-data_exchange_display_name = "Engineering_DCR_Primary"
-primary_contact            = "kinala@unraveldata.com"
-listing_display_name       = "Engineering DCR Listing"
+data_exchange_id           = "{clean_room_name}"
+primary_contact            = ""
 listings = [
   {
-    listing_id        = "unravel_flat_rate_test_listing_assignments"
-    source_dataset_id = "unravel_share_US"
-    shared_table_id   = "projects/unravel-flat-rate-test/datasets/unravel_share_US/tables/ASSIGNMENTS_EU"
-  },
-  {
-    listing_id        = "unravel_flat_rate_test_listing_columns"
-    source_dataset_id = "unravel_share_US"
-    shared_table_id   = "projects/unravel-flat-rate-test/datasets/unravel_share_US/tables/COLUMNS_US"
+    listing_id        = "{listing_id}"
+    source_dataset_id = "{datasetId}"
+    shared_table_id   = "projects/{projectId}/datasets/{datasetId}/tables/{tableId}"
   }
 ]
-<<<<<<< Updated upstream
-subscriber_emails          = ["utkarsh2796@gmail.com, kinala@unraveldata.com"]
-subscription_id            = "utkarsh_clean_room_sub"
-destination_dataset_id     = "subscribed_clean_room_data"
-=======
 subscriber_emails = [
-  "utkarsh2796@gmail.com"
+  ""
 ]
-subscription_id        = "utkarsh_clean_room_sub"
-destination_dataset_id = "subscribed_clean_room_data"
->>>>>>> Stashed changes

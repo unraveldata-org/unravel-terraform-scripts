@@ -39,6 +39,10 @@ Specific steps of terraform deployment can be found in the respective directory 
 ## Documentation
 For detailed instructions on configuring Unravel with your specific cloud platform, refer to the respective directories' README files (e.g., bigquery/README.md). These README files contain platform-specific documentation, guidelines, and best practices to assist you in the integration process.
 
+For private BigQuery dataset sharing with named users or service accounts, use
+[`bigquery-exchange/`](bigquery-exchange/README.md). For Data Clean Room sharing,
+use [`bigquery-analytics/`](bigquery-analytics/README.md).
+
 ## Support and Feedback
 If you encounter any issues or have questions during the integration process, don't hesitate to reach out to our support team at support@unraveldata.com. We are here to assist you and ensure a successful setup.
 

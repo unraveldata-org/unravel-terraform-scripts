@@ -1,0 +1,16 @@
+project_id       = "wayfair-project"
+location         = "US"
+data_exchange_id = "unravel_private_exchange"
+primary_contact  = "owner@example.com"
+
+listings = [
+  {
+    listing_id        = "unravel_cold_tables"
+    source_dataset_id = "unravel_shared"
+  }
+]
+
+subscriber_members = [
+  "user:analyst@example.com",
+  "serviceAccount:unravel-reader@unravel-project.iam.gserviceaccount.com"
+]
